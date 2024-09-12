@@ -13,5 +13,5 @@ search_device = {'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://
 current_page = requests.get(url=url_test, headers=search_device)
 current_page_html_content = BeautifulSoup(current_page.content, 'html5lib')
 
-print('soup: ')
-print(current_page_html_content)
+table = current_page_html_content.find('div', attrs = {'class':'quote'}) 
+print(table)
