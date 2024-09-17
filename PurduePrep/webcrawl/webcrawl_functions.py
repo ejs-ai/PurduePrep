@@ -16,3 +16,10 @@ def url_screen_for_pdf(url):
     out_text_file = pdf_name.replace('.pdf', '.txt')
     pdf_hex_content = open_url(url)
     return pdf_name, out_text_file, pdf_hex_content
+
+def write_out_text_file(file_to_write, pdf_content):
+    with open(file_to_write, "w", encoding="utf-8") as output_file_with_content:
+        for page_num in range(len(pdf_content.pages)):
+            page = pdf_content.pages[page_num]
+            page_text = page.extract_text()
+            output_file_with_content.write(page_text)
