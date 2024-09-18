@@ -15,6 +15,7 @@ beautifulsoup4 = "^4.12.3"
 html5lib = "^1.1"
 requests = "^2.32.3"
 pypdf = "^4.3.1"
+pathlib = "^1.0.1"
 
 
 [build-system]
