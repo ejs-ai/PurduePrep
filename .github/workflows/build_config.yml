@@ -8,6 +8,10 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+    ROOT_DIR: ../../
+    TEST_PATH: ${{ env.ROOT_DIR }}/tests
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -26,3 +30,8 @@ jobs:
     # Run flake8 to check code format
     - name: Run flake8 linter
       run: poetry run flake8 .
+
+    - name: Unit Testing
+      run: |
+          cd ${{ env.TEST_PATH }}
+          poetry run pytest
