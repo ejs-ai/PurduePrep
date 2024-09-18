@@ -11,8 +11,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}  # Ensures push permissions to the repo for black auto format
 
     - name: Set up Python
       uses: actions/setup-python@v5
