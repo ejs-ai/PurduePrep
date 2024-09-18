@@ -51,3 +51,6 @@ print(f"The most similar sentence to Sentence 1 is Sentence {closest_sentence_in
 print(f"model load time: {t2 - t1}") # first load takes longer than subsequent with cached model (has to download from HF)
 print(f"encode time: {t4 - t3}")
 print(f"FAISS load time: {t6 - t5}")
+
+for i in sentence_embeddings_np:
+    print(len(i))

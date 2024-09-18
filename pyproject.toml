@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 faiss-cpu = "^1.8.0.post1"
 sentence-transformers = "^3.0.1"
+nltk = "^3.9.1"
 
 
 [build-system]
