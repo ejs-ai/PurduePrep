@@ -1,4 +1,4 @@
-print('hihihi')
+#fmt: off
 
 # Classes:
 # Page {url, body(extracted info from scrape)}
@@ -41,3 +41,5 @@ print('hihihi')
 # Step 9: Output handler loops through list of question objects and packages to the website
 
 # Output handler ---(output)---> Website
+
+#fmt: on
