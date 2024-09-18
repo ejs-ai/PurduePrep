@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}  # Ensures push permissions to the repo for black auto format
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -18,7 +20,7 @@ jobs:
         python-version: '3.12'
 
     - name: Install Poetry
-      run: pip install poetry                 
+      run: pip install poetry
 
     - name: Install dependencies
       run: poetry install
@@ -27,5 +29,11 @@ jobs:
     - name: Run Black auto-formatter
       run: poetry run black .
 
-    #- name: Run tests
-    #  run: poetry run pytest
+    # Commit and push changes if files were reformatted
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git diff-index --quiet HEAD || git commit -m "chore: auto-format code with Black"
+        git push origin HEAD
