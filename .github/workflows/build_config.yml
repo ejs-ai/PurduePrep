@@ -11,8 +11,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}  # Ensures push permissions to the repo for black auto format
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -25,6 +23,6 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    # Run Black to format code
-    - name: Run Black check
-      run: poetry run black --check .
+    # Run flake8 to check code format
+    - name: Run flake8 linter
+      run: poetry run flake8 .
