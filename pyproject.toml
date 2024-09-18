@@ -10,7 +10,7 @@ python = "^3.12"
 faiss-cpu = "^1.8.0.post1"
 sentence-transformers = "^3.0.1"
 pytest = "^8.3.3"
-black = "^24.8.0"
+flake8 = "^7.1.1"
 
 
 [build-system]

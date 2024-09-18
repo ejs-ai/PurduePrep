@@ -25,6 +25,6 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    # Run Black to format code
-    - name: Run Black check
-      run: poetry run black --check .
+    # Run flake8 to check code format
+    - name: Run flake8 linter
+      run: poetry run flake8 .
