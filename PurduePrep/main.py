@@ -1,11 +1,6 @@
-#fmt: off
-
 # Classes:
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
-
-
-
 
 
 # Step 0: Initialize the website?
@@ -41,5 +36,3 @@
 # Step 9: Output handler loops through list of question objects and packages to the website
 
 # Output handler ---(output)---> Website
-
-#fmt: on
