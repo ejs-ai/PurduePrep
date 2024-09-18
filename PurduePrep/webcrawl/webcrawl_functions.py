@@ -5,7 +5,7 @@ from pathlib import Path
 def open_url(url_to_scrape):
     url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"})
     if not url_content.ok:
-        print("Could not read content at: "+url_to_scrape)
+        print("Could not read content at: " + url_to_scrape)
         url_content = -1
     return url_content
 
