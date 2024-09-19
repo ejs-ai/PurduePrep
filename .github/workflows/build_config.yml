@@ -25,7 +25,7 @@ jobs:
 
     - name: Unit Testing
       run: |
-          cd ../../tests/webcrawl_tests
+          cd ${{ github.workspace }}/tests/webcrawl_tests
           poetry run pytest
 
     - name: Run flake8 linter
