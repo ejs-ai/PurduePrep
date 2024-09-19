@@ -23,11 +23,10 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    # Run flake8 to check code format
-    - name: Run flake8 linter
-      run: poetry run flake8 .
-
     - name: Unit Testing
       run: |
           cd ../../tests/webcrawl_tests
           poetry run pytest
+
+    - name: Run flake8 linter
+      run: poetry run flake8 .
