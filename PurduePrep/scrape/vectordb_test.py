@@ -1,5 +1,3 @@
-# AI Assisted
-
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -9,6 +7,7 @@ import time
 t1 = time.time()
 model = SentenceTransformer('all-MiniLM-L6-v2')
 t2 = time.time()
+
 # Define the sentences
 sentences = [
     "When in the Course of human events, it becomes necessary for one people to dissolve the political bands which have connected them with another, and to assume among the powers of the earth, the separate and equal station to which the Laws of Nature and of Nature's God entitle them, a decent respect to the opinions of mankind requires that they should declare the causes which impel them to the separation.",
@@ -39,15 +38,14 @@ index.add(sentence_embeddings_np)
 query_embedding = sentence_embeddings_np[0].reshape(1, -1)  # Reshape as query for FAISS
 
 # Perform search in FAISS: compare the first sentence against all sentences
-D, I = index.search(query_embedding, k=3)  # k is the number of closest sentences to return
+distances, indices = index.search(query_embedding, k=3)
 
 # Output the indices of the closest sentences (excluding the first sentence itself)
-closest_sentence_index = I[0][1]  # The first result is the query itself, so take the second
+closest_sentence_index = indices[0][1]  # The first result is the query itself, so take the second
 
 # Print which sentence is the most similar
-print(f"The most similar sentence to Sentence 1 is Sentence {closest_sentence_index + 1}.") 
-# As expected, the Gettysburg address is more similar to the Declaration of Independance than a fantasy novel.
-
-print(f"model load time: {t2 - t1}") # first load takes longer than subsequent with cached model (has to download from HF)
+print(f"The most similar sentence to Sentence 1 is Sentence {closest_sentence_index + 1}.")
+print(f"model load time: {t2 - t1}")
+# first load takes longer than subsequent with cached model (has to download from HF)
 print(f"encode time: {t4 - t3}")
 print(f"FAISS load time: {t6 - t5}")

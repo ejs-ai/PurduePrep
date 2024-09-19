@@ -3,9 +3,6 @@
 # Question {url from page, question body}
 
 
-
-
-
 # Step 0: Initialize the website?
 # This is handled in app.py
 
