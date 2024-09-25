@@ -18,6 +18,7 @@ pypdf = "^4.3.1"
 pathlib = "^1.0.1"
 black = "^24.8.0"
 flake8 = "^7.1.1"
+pypdf2 = "^3.0.1"
 
 
 [build-system]
