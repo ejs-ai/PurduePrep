@@ -34,6 +34,7 @@ def get_saved_text():
 
 # Web scraper ---(extracted text)---> Question ID
 # Step 7: Use NLP to identify questions
+        #from Seth: use page_content.body and page_content.url
 
 
 # Question ID ---(question objects)---> Relevance checker
