@@ -4,9 +4,16 @@
 from webcrawl.main import page_content
 
 # Step 0: Initialize the website?
-
+# This is handled in app.py
 
 # Step 1: Retrieve input from the user (text, pdf, or image)
+def get_saved_text():
+    try:
+        with open('input_text.txt', 'r') as fp:
+            input_text = fp.read()
+            return input_text
+    except FileNotFoundError:
+        return None
 
 
 # UI handler ---(input)---> Input handler
@@ -36,3 +43,10 @@ from webcrawl.main import page_content
 # Step 9: Output handler loops through list of question objects and packages to the website
 
 # Output handler ---(output)---> Website
+
+if __name__ == '__main__':
+    input_text = get_saved_text()
+    if input_text:
+        print(f"Processing the input text: {input_text}")
+    else:
+        print("No text available")
