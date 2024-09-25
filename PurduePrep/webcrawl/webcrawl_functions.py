@@ -10,6 +10,7 @@ def open_url(url_to_scrape):
         print("Could not read content at: " + url_to_scrape)
         url_content = -1
     return url_content
+
 def get_content_from_pdf_link(url):
     pdf_content = open_url(url)
     
@@ -23,6 +24,7 @@ def get_content_from_pdf_link(url):
         pdf_text += pdf_reader.pages[page_num].extract_text()
     
     return pdf_text
+
 def get_webcrawl_functions_path():
     current_dir = Path(__file__).resolve()
     for parent in current_dir.parents:
