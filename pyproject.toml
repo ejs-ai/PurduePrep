@@ -21,6 +21,8 @@ flake8 = "^7.1.1"
 pypdf2 = "^3.0.1"
 flask = "^3.0.3"
 flask-cors = "^5.0.0"
+scikit-learn = "^1.5.2"
+nltk = "^3.9.1"
 
 
 [build-system]

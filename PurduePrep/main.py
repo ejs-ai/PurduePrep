@@ -2,6 +2,7 @@
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
 from webcrawl.main import page_content
+from webcrawl.query_build import build_query
 
 # Step 0: Initialize the website?
 # This is handled in app.py
@@ -20,12 +21,12 @@ def get_saved_text():
 # Step 2: Input handler processes input and formats as we need it
 
 
-# Input handler ---(string)---> Querry builder
-# Step 3: Querry builder processes all user's gibberish, extracts relevant info, forms querry string
+# Input handler ---(string)---> Query builder
+# Step 3: Query builder processes all user's gibberish, extracts relevant info, forms query string
 
 
-# Querry builder ---(querry string)---> Web crawler
-# Step 4: Web crawler uses the querry string to produce a list of relevant websites
+# Query builder ---(query string)---> Web crawler
+# Step 4: Web crawler uses the query string to produce a list of relevant websites
 
 
 # Web crawler ---(relevant sites list)---> Scraper
@@ -48,6 +49,8 @@ def get_saved_text():
 if __name__ == '__main__':
     input_text = get_saved_text()
     if input_text:
-        print(f"Processing the input text: {input_text}")
+        # print(f"Processing the input text: {input_text}")
+        webcrawl_url, keywords = build_query(input_text)
     else:
         print("No text available")
+        exit
