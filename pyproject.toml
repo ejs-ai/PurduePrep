@@ -10,10 +10,12 @@ python = "^3.12"
 faiss-cpu = "^1.8.0.post1"
 sentence-transformers = "^3.0.1"
 nltk = "^3.9.1"
-
-
-[tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"
+xgboost = "^2.1.1"
+numpy = "<=2.0.0"
+pandas = "^2.2.2"
+seaborn = "^0.13.2"
+
 
 [build-system]
 requires = ["poetry-core"]
