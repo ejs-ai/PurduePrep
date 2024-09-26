@@ -1,7 +1,7 @@
 # Classes:
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
-from webcrawl.main import page_content
+from webcrawl.crawler import page_content
 
 # Step 0: Initialize the website?
 # This is handled in app.py
