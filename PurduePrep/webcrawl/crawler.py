@@ -1,11 +1,20 @@
-from pypdf import PdfReader
-import os
-from webcrawl.webcrawl_functions import get_content_from_pdf_link
-from webcrawl.page import Page
+import requests
+# from webcrawl.webcrawl_functions import get_content_from_pdf_link
+# from welcrawl.webcrawl_functions import get_content_from_pdf_link, get_websites, init_gather_websites, crawl
+# from webcrawl.page import Page
 
-### TEST URL --> WILL BE REPLACED ONCE WE HAVE GATHER_WEBSITES WORKING
-ece404_url = 'https://weeklyjoys.wordpress.com/wp-content/uploads/2021/10/ece404_e1_sp2021.pdf'
+from webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
+from page import Page
 
-### Extract text from URL
-pdf_text = get_content_from_pdf_link(ece404_url)
-page_content = Page(ece404_url, pdf_text)
+#Input from Emma
+keywords = ['cryptography', 'key', 'decryption', 'algorithm', 'encryption', 'secret', 'used', 'ciphertext', 'classical', 'plaintext']
+search_query = f"{' '.join(keywords)} past exam midterm final site:.edu"
+
+# Gather relevant websites from query
+websites_list, max_depth, all_page_scores = init_gather_websites(search_query)
+sorted_relevant_urls = crawl_websites(search_query, websites_list, max_depth, all_page_scores)
+
+# Extract page content
+for url, score in sorted_relevant_urls:
+    pdf_text = get_content_from_pdf_link(url)
+    page_content = Page(url, pdf_text)
