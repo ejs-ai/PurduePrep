@@ -4,6 +4,7 @@
 
 from webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
 from webcrawl.page import Page
+from webcrawl.query_build import build_query
 
 # Step 0: Initialize the website?
 # This is handled in app.py
@@ -22,12 +23,12 @@ def get_saved_text():
 # Step 2: Input handler processes input and formats as we need it
 
 
-# Input handler ---(string)---> Querry builder
-# Step 3: Querry builder processes all user's gibberish, extracts relevant info, forms querry string
+# Input handler ---(string)---> Query builder
+# Step 3: Query builder processes all user's gibberish, extracts relevant info, forms query string
 
 
-# Querry builder ---(querry string)---> Web crawler
-# Step 4: Web crawler uses the querry string to produce a list of relevant websites
+# Query builder ---(query string)---> Web crawler
+# Step 4: Web crawler uses the query string to produce a list of relevant websites
 
     #from Seth: replace this with actual query builder 
 keywords = ['cryptography', 'key', 'decryption', 'algorithm', 'encryption', 'secret', 'used', 'ciphertext', 'classical', 'plaintext']
@@ -58,6 +59,8 @@ for url, score in sorted_relevant_urls:
 if __name__ == '__main__':
     input_text = get_saved_text()
     if input_text:
-        print(f"Processing the input text: {input_text}")
+        # print(f"Processing the input text: {input_text}")
+        webcrawl_url, keywords = build_query(input_text)
     else:
         print("No text available")
+        exit
