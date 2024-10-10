@@ -1,5 +1,5 @@
 import numpy as np
-from purdueprep.webcrawl.webcrawl_functions import open_url, get_content_from_pdf_link
+from PurduePrep.webcrawl.webcrawl_functions import open_url, get_content_from_pdf_link
 import spacy
 import requests
 from io import BytesIO

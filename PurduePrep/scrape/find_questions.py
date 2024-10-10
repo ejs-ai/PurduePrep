@@ -1,7 +1,7 @@
 import time
 t1 = time.time()
 import re
-from purdueprep.scrape.split_page import split_page
+from PurduePrep.scrape.split_page import split_page
 import xgboost as xgb
 import pickle
 from sentence_transformers import SentenceTransformer
