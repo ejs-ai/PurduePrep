@@ -37,9 +37,7 @@ def build_query(text):
     query = ' '.join(keywords) + ' site:.edu'
     
     # Encode query to be URL-safe, build google search url
-    encoded_query = urllib.parse.quote(query)
-    print("Encoded query: " + encoded_query)
-    search_url = f"https://www.google.com/search?q={encoded_query}"
-    print("Search URL: " + search_url)
-    print("Keywords: " + str(keywords))
-    return search_url, keywords
+    # encoded_query = urllib.parse.quote(query)
+    #search_url = f"https://www.google.com/search?q={encoded_query}"
+    
+    return query

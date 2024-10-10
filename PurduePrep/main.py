@@ -7,15 +7,8 @@ from webcrawl.query_build import build_query
 # Step 0: Initialize the website?
 # This is handled in app.py
 
-# Step 1: Retrieve input from the user (text, pdf, or image)
-def get_saved_text():
-    try:
-        with open('input_text.txt', 'r') as fp:
-            input_text = fp.read()
-            return input_text
-    except FileNotFoundError:
-        return None
-
+# Step 1: Retrieve input from the user (text, pdf, or image). App.py handles processing of the input type and calls this function with a string
+    
 
 # UI handler ---(input)---> Input handler
 # Step 2: Input handler processes input and formats as we need it
@@ -44,13 +37,24 @@ def get_saved_text():
 # Relevance checker ---(list of question objects)---> Output handler
 # Step 9: Output handler loops through list of question objects and packages to the website
 
+# this is hard coded for now but will later be from our processing
+# questions needs to be a global variable so app.py can import it
+def get_questions():
+    questions = [
+        ("What is the capital of France?", "https://en.wikipedia.org/wiki/Paris"),
+        ("What is 2 + 2?", "https://en.wikipedia.org/wiki/Addition"),
+        ("Which planet is known as the Red Planet?", "https://en.wikipedia.org/wiki/Mars"),
+    ]
+    return questions
+
 # Output handler ---(output)---> Website
 
-if __name__ == '__main__':
-    input_text = get_saved_text()
-    if input_text:
-        # print(f"Processing the input text: {input_text}")
-        webcrawl_url, keywords = build_query(input_text)
+def PurduePrepBackend(input_str):
+    if input_str:
+        print(input_str)
+        query_string = build_query(input_str)
     else:
-        print("No text available")
+        print("No input text available")
         exit
+    questions = get_questions()
+    return questions
