@@ -2,9 +2,9 @@
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
 
-from webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
-from webcrawl.page import Page
-from webcrawl.query_build import build_query
+from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
+from PurduePrep.webcrawl.page import Page
+from PurduePrep.webcrawl.query_build import build_query
 
 # Step 0: Initialize the website?
 # This is handled in app.py
