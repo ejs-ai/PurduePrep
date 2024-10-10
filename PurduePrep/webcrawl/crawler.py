@@ -8,10 +8,11 @@ from page import Page
 
 #Input from Emma
 keywords = ['cryptography', 'key', 'decryption', 'algorithm', 'encryption', 'secret', 'used', 'ciphertext', 'classical', 'plaintext']
+search_query = f"{' '.join(keywords)} past exam midterm final site:.edu"
 
 # Gather relevant websites from query
-keywords_str, websites_list, max_depth, all_page_scores = init_gather_websites(keywords)
-sorted_relevant_urls = crawl_websites(keywords_str, websites_list, max_depth, all_page_scores)
+websites_list, max_depth, all_page_scores = init_gather_websites(search_query)
+sorted_relevant_urls = crawl_websites(search_query, websites_list, max_depth, all_page_scores)
 
 # Extract page content
 for url, score in sorted_relevant_urls:

@@ -8,8 +8,9 @@ import re
 from collections import defaultdict
 
 def get_websites(search_query):
-    API_KEY = "AIzaSyCRtfiYczH6l1OriVSen7R5cV9455zCydQ"
-    SEARCH_ENGINE_ID = "1621af06f901140ce"
+    with open(get_webcrawl_functions_path() + '\google_search_api.txt', 'r') as file:
+        API_KEY = file.read().strip()
+    SEARCH_ENGINE_ID = "7153013e76dda42f8"
 
     url = 'https://www.googleapis.com/customsearch/v1'
     params = {
@@ -44,7 +45,7 @@ def open_url(url_to_scrape):
         return -1 # Skip this URL if it times out
     
     except requests.RequestException as e:
-        print(f"Failed to retrieve {url}: {e}")
+        print(f"Failed to retrieve {url_to_scrape}: {e}")
         return  -1 # Handle other request exceptions
 
 def get_content_from_pdf_link(url):
@@ -114,12 +115,11 @@ def crawl(url, depth, keywords, visited = None, page_scores = None):
 
     return page_scores
 
-def init_gather_websites(keywords):
-    max_depth = 1
-    keywords_str = ' '.join(keywords)
+def init_gather_websites(keywords_str):
+    max_depth = 2
     websites_list = get_websites(f"{keywords_str} past exam midterm final site:.edu")
     all_page_scores = defaultdict(int)
-    return keywords_str, websites_list, max_depth, all_page_scores
+    return websites_list, max_depth, all_page_scores
 
 def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
     for website in websites_list:
