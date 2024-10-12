@@ -5,6 +5,7 @@ from PurduePrep.scrape.split_page import split_page
 import xgboost as xgb
 import pickle
 from sentence_transformers import SentenceTransformer
+from PurduePrep.webcrawl.page import Page
 
 ### TEST URL --> WILL BE REPLACED ONCE WE HAVE GATHER_WEBSITES WORKING
 ece404_url = 'https://weeklyjoys.wordpress.com/wp-content/uploads/2021/10/ece404_e1_sp2021.pdf'
@@ -25,26 +26,13 @@ def regex_filter(text):
 with open('questionid.pkl', 'rb') as f:
     question_id = pickle.load(f)
 
-num_qs = 0
-num_pt = 0
-
-clusters, lengths = split_page(ece404_url)
-unfiltered = len(clusters)
-clusters = list(filter(regex_filter, clusters))
-filtered = len(clusters)
-num_pt += unfiltered - filtered
-
-preds = predict_sentences(clusters, question_id)
-
-for index, sentence in enumerate(clusters):
-    if preds[index] == 1:
-        num_qs += 1
-        #print("Question " + str(num_qs) + ":\n" + sentence + '\n\n')
-    else:
-        num_pt += 1
-        #print("Plaintext " + str(num_pt) + ":\n" + sentence + '\n\n')
-
-print(str(num_pt) + " blocks of plaintext and " + str(num_qs) + " questions found.")
-
-t2 = time.time()
-print("took " + str(t2 - t1) + " seconds.")
+def find_questions(pages):
+    questions = []
+    for page in pages:
+        clusters, lengths = split_page(page.body)
+        clusters = list(filter(regex_filter, clusters))
+        preds = predict_sentences(clusters, question_id)
+        for index, sentence in enumerate(clusters):
+            if preds[index] == 1:
+                questions.append(sentence)
+    return questions
