@@ -30,8 +30,7 @@ def clean_text(text):
     # Add your text cleaning process here
     return text
 
-def split_page(url):
-    text = get_content_from_pdf_link(url)
+def split_page(text):
     # Initialize the clusters lengths list and final texts list
     clusters_lens = []
     final_texts = []
