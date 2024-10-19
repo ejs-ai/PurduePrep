@@ -23,10 +23,9 @@ def regex_filter(text):
     pattern = r'(^\d+\.|^[a-zA-Z]\.\s*[\s\S]*?(?:\?|\.|\:)|(\b(What|Why|How|Explain|Describe|Define|List|Which|When|Where|Calculate|Compare|Discuss|Name|Identify|Solve|Determine|Recover|Convert|Compute)\b[\s\S]*?[?.:])|(\b(Show|Formulate|Demonstrate|Design|Construct|Prove|Provide|Find|Use)\b[\s\S]*?(work|equation|steps|solution|method|equations|process|procedure)[\s\S]*?[.:])|(\•\s*[\s\S]+))'
     return bool(re.search(pattern, text))
 
-with open('questionid.pkl', 'rb') as f:
-    question_id = pickle.load(f)
-
 def find_questions(pages):
+    with open('questionid.pkl', 'rb') as f:
+        question_id = pickle.load(f)
     questions = []
     for page in pages:
         clusters, lengths = split_page(page.body)
