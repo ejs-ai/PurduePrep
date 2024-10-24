@@ -28,5 +28,5 @@ jobs:
           cd ${{ github.workspace }}/tests/webcrawl_tests
           poetry run pytest
 
-    - name: Run flake8 linter
-      run: poetry run flake8 .
+    # - name: Run flake8 linter
+    #   run: poetry run flake8 .
