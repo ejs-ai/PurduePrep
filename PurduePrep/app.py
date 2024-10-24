@@ -20,6 +20,7 @@ def receive_text():
             input_str = file.read().decode('utf-8')  # Read text file content
         elif file_extension == '.pdf':
             input_str = extract_text_from_pdf(file)
+            print("input string: " + input_str)
         else:
             return jsonify({"error": "Unsupported file type"}), 400
     else:
@@ -28,7 +29,6 @@ def receive_text():
 
     if input_str is None:
         return jsonify({"error": "No input text provided"}), 400
-    print("input string: " + input_str)
     # Respond back to the frontend with a success message
     return jsonify({"message": "Text received successfully", "receivedText": input_str})
 
