@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import PyPDF2
 import os
-from main import PurduePrepBackend
+from PurduePrep.main import main
 
 app = Flask(__name__)
 CORS(app)  # allow Cross-Origin requests, required for communication between frontend and backend
@@ -45,7 +45,7 @@ def extract_text_from_pdf(pdf_file):
 def get_questions():
     if input_str is None:
         return jsonify({"error": "No input data available"}), 400
-    questions = PurduePrepBackend(input_str)
+    questions = main(input_str)
     questions_with_urls = [{"question": q, "url": url} for q, url in questions]
     return jsonify({"questions": questions_with_urls})
 
