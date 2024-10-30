@@ -3,3 +3,5 @@ tests/
 .git/
 __pycache__/
 node_modules/
+pyproject.toml
+poetry.lock
