@@ -115,7 +115,7 @@ const Home: React.FC = () => {
   );
 };
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex' as const,
     flexDirection: 'column' as const,
