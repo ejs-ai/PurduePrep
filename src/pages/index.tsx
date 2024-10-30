@@ -117,7 +117,7 @@ const Home: React.FC = () => {
 
 const styles = {
   container: {
-    display: 'flex',
+    display: 'flex' as const,
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
@@ -141,7 +141,7 @@ const styles = {
     fontFamily: '"Cantora One", sans-serif',
   },
   columns: {
-    display: 'flex',
+    display: 'flex' as const,
     flexDirection: 'row' as const,
     justifyContent: 'space-between',
     width: '80%',  // Adjust the width as needed
