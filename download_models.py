@@ -7,7 +7,7 @@ import os
 def download_spacy_model():
     spacy.cli.download("en_core_web_sm")
 
-# # Download nltk model
+# # Download nltk model # Done with nltk.txt file
 # def download_nltk_resources():
 #     nltk.download('stopwords')  
 

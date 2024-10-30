@@ -118,7 +118,7 @@ const Home: React.FC = () => {
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as 'column',
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
@@ -142,7 +142,7 @@ const styles = {
   },
   columns: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row' as 'row',
     justifyContent: 'space-between',
     width: '80%',  // Adjust the width as needed
   },
