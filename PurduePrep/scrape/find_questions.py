@@ -1,11 +1,7 @@
-import time
-t1 = time.time()
 import re
 from PurduePrep.scrape.split_page import split_page
-import xgboost as xgb
 import pickle
 from sentence_transformers import SentenceTransformer
-from PurduePrep.webcrawl.page import Page
 
 ### TEST URL --> WILL BE REPLACED ONCE WE HAVE GATHER_WEBSITES WORKING
 ece404_url = 'https://weeklyjoys.wordpress.com/wp-content/uploads/2021/10/ece404_e1_sp2021.pdf'
