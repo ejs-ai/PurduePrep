@@ -7,9 +7,9 @@ import os
 def download_spacy_model():
     spacy.cli.download("en_core_web_sm")
 
-# Download nltk model
-def download_nltk_resources():
-    nltk.download('stopwords')  
+# # Download nltk model
+# def download_nltk_resources():
+#     nltk.download('stopwords')  
 
 # Load the pickle file
 def load_pickle_model():
@@ -24,5 +24,5 @@ def load_pickle_model():
 # Run all downloads
 if __name__ == "__main__":
     download_spacy_model()
-    download_nltk_resources()
+    # download_nltk_resources()
     load_pickle_model()
