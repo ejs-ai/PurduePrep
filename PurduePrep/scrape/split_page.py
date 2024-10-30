@@ -1,10 +1,6 @@
 import numpy as np
 from PurduePrep.webcrawl.webcrawl_functions import open_url, get_content_from_pdf_link
 import spacy
-import requests
-from io import BytesIO
-from pathlib import Path
-import PyPDF2
 
 # Load the Spacy model
 # "python -m spacy download en_core_web_sm" in terminal

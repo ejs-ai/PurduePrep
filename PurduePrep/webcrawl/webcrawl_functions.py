@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import re
 from collections import defaultdict
+import time
+import concurrent.futures
 
 def get_websites(search_query):
     with open(get_webcrawl_functions_path() + '\\google_search_api.txt', 'r') as file:
@@ -34,7 +36,7 @@ def get_websites(search_query):
 
 def open_url(url_to_scrape):
     try:
-        url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=10)
+        url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=3)
         if not url_content.ok:
             print("Could not read content at: " + url_to_scrape)
             url_content = -1
@@ -122,9 +124,16 @@ def init_gather_websites(keywords_str):
     return websites_list, max_depth, all_page_scores
 
 def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
-    for website in websites_list:
-        page_scores = crawl(website, max_depth, keywords)
-        if page_scores:
-            all_page_scores.update(page_scores)
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_to_website = {executor.submit(crawl, website, max_depth, keywords): website for website in websites_list}
+
+        for future in concurrent.futures.as_completed(future_to_website):
+            website = future_to_website[future]
+            try:
+                page_scores = future.result()
+                if page_scores:
+                    all_page_scores.update(page_scores)
+            except Exception as e:
+                print(f"{website} generated an exception: {e}")
 
     return sorted(all_page_scores.items(), key=lambda x: x[1], reverse=True)[:10]
