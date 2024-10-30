@@ -97,7 +97,7 @@ const Home: React.FC = () => {
           height={50} // Adjust the height as needed
         />
       </div>
-      <h1 style={styles.title}>PurduePrep Beta!</h1>
+      <h1 style={styles.title}>PurduePrep 0.1.0</h1>
       <p style={styles.explanation}>PurduePrep finds real exam questions from universities to match your text or document input. We recommend inputting course notes!</p>
       <div style={styles.columns}>
       
