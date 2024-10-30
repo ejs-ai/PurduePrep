@@ -13,10 +13,10 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);  // For error handling
 
   // Handle input via text or file
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setInputText(event.target.value);
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
   };
