@@ -15,10 +15,11 @@ const Home: React.FC = () => {
   const [timeoutReached, setTimeoutReached] = useState<boolean>(false); // To control error timeout
 
   // Handle input via text or file
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setInputText(event.target.value);
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
   };
@@ -143,10 +144,10 @@ const Home: React.FC = () => {
   );
 };
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    display: 'flex',
-    flexDirection: 'column' as 'column',
+    display: 'flex' as const,
+    flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
@@ -179,8 +180,8 @@ const styles = {
     lineHeight: '1.5',  // Make it more readable
   },
   columns: {
-    display: 'flex',
-    flexDirection: 'row' as 'row',
+    display: 'flex' as const,
+    flexDirection: 'row' as const,
     justifyContent: 'space-between',
     width: '80%',
   },
