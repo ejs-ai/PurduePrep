@@ -23,10 +23,11 @@ def get_websites(search_query):
 
     response = requests.get(url, params = params )
     results = response.json()
+    num_links = len(results['items'])
 
     websites_list = []
     if 'items' in results:
-        for link_number in range(10):
+        for link_number in range(num_links):
             websites_list.append(results['items'][link_number]['link'])
     else:
         print("No results found.")

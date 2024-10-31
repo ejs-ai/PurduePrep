@@ -14,6 +14,7 @@ search_query = f"{' '.join(keywords)} past exam midterm final site:.edu"
 start_time = time.time()
 # Gather relevant websites from query
 websites_list, max_depth, all_page_scores = init_gather_websites(search_query)
+
 sorted_relevant_urls = crawl_websites(search_query, websites_list, max_depth, all_page_scores)
 
 crawl_time = time.time()
@@ -25,5 +26,6 @@ for url, score in sorted_relevant_urls:
     page_content = Page(url, pdf_text)
 end_time = time.time()
 print(f"Total end_time-craw_time: {end_time - crawl_time} seconds")
+
 
 
