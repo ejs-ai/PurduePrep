@@ -7,6 +7,7 @@ from PurduePrep.webcrawl.page import Page
 from PurduePrep.webcrawl.query_build import build_query
 from PurduePrep.scrape.find_questions import find_questions
 
+MAX_NUM_QUESTIONS = 5
 def main(user_input):
     # Step 0: Initialize the website?
     # This is handled in app.py
