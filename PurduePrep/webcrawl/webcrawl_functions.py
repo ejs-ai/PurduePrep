@@ -119,7 +119,7 @@ def crawl(url, depth, keywords, visited = None, page_scores = None):
     return page_scores
 
 def init_gather_websites(keywords_str):
-    max_depth = 2
+    max_depth = 1
     websites_list = get_websites(f"{keywords_str} past exam midterm final site:.edu")
     all_page_scores = defaultdict(int)
     return websites_list, max_depth, all_page_scores
