@@ -8,6 +8,8 @@ from PurduePrep.webcrawl.query_build import build_query
 from PurduePrep.scrape.find_questions import find_questions
 
 MAX_NUM_QUESTIONS = 5
+CRAWL_DEPTH = 2
+
 def main(user_input):
     # Step 0: Initialize the website?
     # This is handled in app.py
@@ -25,15 +27,15 @@ def main(user_input):
 
     # Query builder ---(query string)---> Web crawler
     # Step 4: Web crawler uses the query string to produce a list of relevant websites
-    websites_list, max_depth, all_page_scores = init_gather_websites(query_string)
-    sorted_relevant_urls = crawl_websites(query_string, websites_list, max_depth, all_page_scores)
+    websites_list, all_page_scores = init_gather_websites(query_string)
+    sorted_relevant_urls = crawl_websites(query_string, websites_list, CRAWL_DEPTH, all_page_scores)
 
     # Web crawler ---(relevant sites list)---> Scraper
     # Step 5: Web scraper extracts information from websites
     questions = []
     for url, score in sorted_relevant_urls:
         pdf_text = get_content_from_pdf_link(url)
-        page_content = Page(url, pdf_text)
+        page_content = Page(url, pdf_text, score[1])
 
         # Web scraper ---(extracted text)---> Question ID
         # Step 7: Use NLP to identify questions

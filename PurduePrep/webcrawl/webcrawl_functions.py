@@ -30,7 +30,7 @@ def get_websites(search_query):
         for link_number in range(num_links):
             websites_list.append(results['items'][link_number]['link'])
     else:
-        print("No results found.")
+        #print("No results found.")
         websites_list.append("-1")
 
     return websites_list
@@ -39,31 +39,38 @@ def open_url(url_to_scrape):
     try:
         url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=3)
         if not url_content.ok:
-            print("Could not read content at: " + url_to_scrape)
+            #print("Could not read content at: " + url_to_scrape)
             url_content = -1
         return url_content
     
     except requests.exceptions.Timeout:
-        print(f"Timeout occurred while trying to retrieve {url_to_scrape}. Skipping.")
+        #print(f"Timeout occurred while trying to retrieve {url_to_scrape}. Skipping.")
         return -1 # Skip this URL if it times out
     
     except requests.RequestException as e:
-        print(f"Failed to retrieve {url_to_scrape}: {e}")
+        #print(f"Failed to retrieve {url_to_scrape}: {e}")
         return  -1 # Handle other request exceptions
 
 def get_content_from_pdf_link(url):
+    title_page_multiplier = 1
     pdf_content = open_url(url)
     
     if pdf_content == -1:
-        return False
+        return False, title_page_multiplier
     
     pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content.content))
     pdf_text = ""
+
+    if len(pdf_reader.pages) > 20:
+        return False, title_page_multiplier
+
+    if ("exam" or "Exam" or "midterm" or "Midterm" or "final" or "Final") in pdf_reader.pages[0].extract_text():
+        title_page_multiplier = 1.5
     
     for page_num in range(len(pdf_reader.pages)):
         pdf_text += pdf_reader.pages[page_num].extract_text()
     
-    return pdf_text
+    return pdf_text, title_page_multiplier
 
 def get_webcrawl_functions_path():
     current_dir = Path(__file__).resolve()
@@ -76,29 +83,58 @@ def get_webcrawl_functions_path():
     webcrawl_functions_path = purdue_prep_dir / 'webcrawl'
     return str(webcrawl_functions_path)
 
-def contains_question_patterns(text):
-    if type(text) is str:
-        lines = text.split("\n")
-        question_patterns = sum(1 for line in lines if re.match(r"^\s*(\(?[a-dA-D][\.\)]\)?)", line.strip()))
-        return question_patterns
+# def check_if_exam(text):
+#     if type(text) is str:
+#         lines = text.split("\n")
+#         question_patterns = sum(1 for line in lines if re.match(r"^\s*(\(?[a-dA-D][\.\)]\)?)", line.strip()))
+#         print('question_patterns on this page: '+str(question_patterns))
+#         return question_patterns
+    
+def check_if_exam(text):
+    lines = text.split("\n")
+    question_patterns = 0
+    pattern_indices = []
+
+    for i, line in enumerate(lines):
+        if re.match(r"^\s*(\(?[a-dA-D][\.\)]\)?)", line.strip()):
+            question_patterns += 1
+            pattern_indices.append(i)  # Store the index where pattern was found
+    
+    return question_patterns, pattern_indices
 
 def crawl(url, depth, keywords, visited = None, page_scores = None):
     if visited is None:
         visited = set()
     if page_scores is None:
-        page_scores = defaultdict(int)
+        page_scores = defaultdict(lambda: (0, []))  # Default to (score, pattern_indices)
+
 
     if depth == 0 or url in visited:
         return
-    print(f"Crawling: {url}")
+    #print(f"Crawling: {url}")
     visited.add(url)
 
+    if ("lecture" or "Lecture" or "lec" or "Lec") in url.lower():
+        #print(f"Skipping PDF file (contains Lecture): {url}")
+        return
+    
+    if ("syllabus" or "Syllabus") in url.lower():
+        #print(f"Skipping PDF file (contains Syllabus): {url}")
+        return
+
+    # Skip YouTube URLs
+    if "youtube" in url or "youtu.be" in url:
+        #print(f"Skipping YouTube link: {url}")
+        return
+    
     ## Fetch PDF content
     if url.lower().endswith('.pdf'):
-        pdf_text = get_content_from_pdf_link(url)
+        #Open PDF and get its text
+        pdf_text, title_page_multiplier = get_content_from_pdf_link(url)
         if pdf_text:
-            page_scores[url] = contains_question_patterns(pdf_text)
-
+            score, pattern_indices = check_if_exam(pdf_text)
+            page_scores[url] = (score *title_page_multiplier, pattern_indices)
+            
     ## If not PDF, keep looking for a DARN PDF
     else:
         http_request_response = open_url(url)
@@ -119,10 +155,9 @@ def crawl(url, depth, keywords, visited = None, page_scores = None):
     return page_scores
 
 def init_gather_websites(keywords_str):
-    max_depth = 1
     websites_list = get_websites(f"{keywords_str} past exam midterm final site:.edu")
     all_page_scores = defaultdict(int)
-    return websites_list, max_depth, all_page_scores
+    return websites_list, all_page_scores
 
 def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
     with concurrent.futures.ThreadPoolExecutor() as executor:
