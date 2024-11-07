@@ -4,7 +4,7 @@ Thank you for your interest in contributing to PurduePrep! This project aims to 
 
 ## Project Architecture Overview
 We developed the complete backend in Python with Flask as an API for frontend communication. Next.js was used a framework for a React frontend.
-![System Design](docs/PurduePrep_system_components.png)
+![System Design](PurduePrep_system_components.png)
 
 ## How to Contribute
 
