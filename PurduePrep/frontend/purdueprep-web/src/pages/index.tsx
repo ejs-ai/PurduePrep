@@ -17,35 +17,49 @@ const Home: React.FC = () => {
   // Handle input via text or file
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setInputText(event.target.value);
+    setSelectedFile(null);  // Clear selected file if text input is used
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
+    setInputText('');  // Clear text input if file is selected
   };
 
-  // Send input to Flask backend
+  // Send input (text or file) to Flask backend
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/api/receive-text', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ inputText: inputText }),  // Send input value as JSON
-      });
-  
+      let response;
+      
+      // Check if a file is selected, use FormData for file upload
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        
+        response = await fetch('/api/receive-text', {
+          method: 'POST',
+          body: formData,
+        });
+      } else {
+        // Otherwise, send text input as JSON
+        response = await fetch('/api/receive-text', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ inputText: inputText }),
+        });
+      }
+      
       const data = await response.json();
-  
-      // Check if the backend response is successful
+
       if (data.message === 'Text received successfully') {
-        // Fetch questions again after successful input submission
-        fetchQuestions();  // Refetch questions from the backend
+        fetchQuestions();  // Fetch questions from backend on success
       } else {
         setError('Failed to submit input.');
       }
     } catch (error) {
-      console.error('Error sending text to backend:', error);
+      console.error('Error sending data to backend:', error);
       setError('Error communicating with backend.');
     }
   };
