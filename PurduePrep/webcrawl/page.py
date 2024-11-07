@@ -1,8 +1,8 @@
 class Page:
-    def __init__(self, url, body, relevant_lines):
+    def __init__(self, url, body, relevant_indices):
         self.url = url
         self.body = body
-        self.relevant_lines = relevant_lines
+        self.relevant_indices = relevant_indices
         # How to use relevant_lines: each value in the list represents a line in the text body that is is suspected to contain a question.
         # Example use:
         #     lines = page_content.body[0].split("\n")
@@ -14,4 +14,4 @@ class Page:
         print("\n")
         print("BODY: " + str(self.body))
         print("\n")
-        print("RELEVANT LINES: "+ str(self.relevant_lines))
+        print("RELEVANT LINES: "+ str(self.relevant_indices))

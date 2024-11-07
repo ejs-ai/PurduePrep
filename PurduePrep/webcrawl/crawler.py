@@ -24,8 +24,8 @@ print(f"Total time to gather relevant sites: {crawl_time - start_time} seconds")
 
 # Extract page content
 for url, score in sorted_relevant_urls:
-    pdf_text = get_content_from_pdf_link(url)
+    pdf_text, _ = get_content_from_pdf_link(url)
     page_content = Page(url, pdf_text, score[1])
 
 end_time = time.time()
-print(f"Total time to scrape sites: {end_time - crawl_time} seconds")
+print(f"Total time to pull web content: {end_time - crawl_time} seconds")
