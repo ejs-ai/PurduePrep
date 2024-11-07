@@ -82,13 +82,6 @@ def get_webcrawl_functions_path():
         raise FileNotFoundError("Could not locate the 'PurduePrep' directory")
     webcrawl_functions_path = purdue_prep_dir / 'webcrawl'
     return str(webcrawl_functions_path)
-
-# def check_if_exam(text):
-#     if type(text) is str:
-#         lines = text.split("\n")
-#         question_patterns = sum(1 for line in lines if re.match(r"^\s*(\(?[a-dA-D][\.\)]\)?)", line.strip()))
-#         print('question_patterns on this page: '+str(question_patterns))
-#         return question_patterns
     
 def check_if_exam(text):
     lines = text.split("\n")
