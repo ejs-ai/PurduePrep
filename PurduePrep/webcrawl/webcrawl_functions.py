@@ -111,20 +111,20 @@ def crawl(url, depth, keywords, visited = None, page_scores = None):
 
     if depth == 0 or url in visited:
         return
-    #print(f"Crawling: {url}")
+    print(f"Crawling: {url}")
     visited.add(url)
 
     if ("lecture" or "Lecture" or "lec" or "Lec") in url.lower():
-        #print(f"Skipping PDF file (contains Lecture): {url}")
+        print(f"Skipping PDF file (contains Lecture): {url}")
         return
     
     if ("syllabus" or "Syllabus") in url.lower():
-        #print(f"Skipping PDF file (contains Syllabus): {url}")
+        print(f"Skipping PDF file (contains Syllabus): {url}")
         return
 
     # Skip YouTube URLs
     if "youtube" in url or "youtu.be" in url:
-        #print(f"Skipping YouTube link: {url}")
+        print(f"Skipping YouTube link: {url}")
         return
     
     ## Fetch PDF content

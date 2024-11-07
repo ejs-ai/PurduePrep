@@ -3,7 +3,6 @@ from PurduePrep.webcrawl.page import Page
 from PurduePrep.webcrawl.crawler import crawl_websites
 from PurduePrep.scrape.find_questions import find_questions
 
-
 CRAWL_DEPTH = 2
 
 keywords = ['vector', 'row space', 'matrix', 'basis', 'diagonalizable']
