@@ -1,45 +1,54 @@
 import re
 from PurduePrep.scrape.split_page import split_page
-import pickle
-from sentence_transformers import SentenceTransformer
 from PurduePrep.webcrawl.page import Page
-import os
-
+from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link
+from transformers import BertTokenizer
+from PurduePrep.scrape.bert_functions import BERTClassifier, predict_question
+from torch import load, device, cuda
 MAX_TEXT_LENGTH = 1000000
 
-### TEST URL --> WILL BE REPLACED ONCE WE HAVE GATHER_WEBSITES WORKING
+### TEST URLS
 ece404_url = 'https://weeklyjoys.wordpress.com/wp-content/uploads/2021/10/ece404_e1_sp2021.pdf'
 powerpoint_url = 'https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture13.pdf'
 
-def vector_encode(strings):
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-    return model.encode(strings)
-
-def predict_sentences(sentences, model):
-    sentences = vector_encode(sentences)
-    return model.predict(sentences)
+def predict_sentences(sentences, model, tokenizer, dev):
+    output = []
+    for input in sentences:
+        pred = predict_question(input, model, tokenizer, dev)
+        output.append(pred)
+    print(output)
+    return output
 
 def regex_filter(text):
     pattern = r'(^\d+\.|^[a-zA-Z]\.\s*[\s\S]*?(?:\?|\.|\:)|(\b(What|Why|How|Explain|Describe|Define|List|Which|When|Where|Calculate|Compare|Discuss|Name|Identify|Solve|Determine|Recover|Convert|Compute)\b[\s\S]*?[?.:])|(\b(Show|Formulate|Demonstrate|Design|Construct|Prove|Provide|Find|Use)\b[\s\S]*?(work|equation|steps|solution|method|equations|process|procedure)[\s\S]*?[.:])|(\•\s*[\s\S]+))'
     return bool(re.search(pattern, text))
 
-
+def load_model():
+    bert_model_name = 'bert-base-uncased'
+    num_classes = 2
+    dev = device("cuda" if cuda.is_available() else "cpu")
+    tokenizer = BertTokenizer.from_pretrained(bert_model_name)
+    model = BERTClassifier(bert_model_name, num_classes)
+    model.load_state_dict(load('PurduePrep\\scrape\\bert_classifier.pth', weights_only=True, map_location=dev))
+    return model, tokenizer, dev
 
 def find_questions(page):
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    pkl_path = os.path.join(script_dir, 'questionid.pkl')
-    with open(pkl_path, 'rb') as f:
-        question_id = pickle.load(f)
- 
+    question_id, tokenizer, dev = load_model()
     questions = []
-    
     if((len(page.body) > MAX_TEXT_LENGTH)): # max length
         return None
     
     clusters, lengths = split_page(page.body)
     clusters = list(filter(regex_filter, clusters))
-    preds = predict_sentences(clusters, question_id)
+    preds = predict_sentences(clusters, question_id, tokenizer, dev)
     for index, sentence in enumerate(clusters):
         if preds[index] == 1:
             questions.append(sentence)
     return questions
+
+# Testing
+# if __name__ == '__main__':
+#     input_list = Page(ece404_url, get_content_from_pdf_link(powerpoint_url))
+#     questions = find_questions(input_list)
+    # for i in questions:
+    #     print(i + '\n\n')

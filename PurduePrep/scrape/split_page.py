@@ -2,9 +2,13 @@ import numpy as np
 from PurduePrep.webcrawl.webcrawl_functions import open_url, get_content_from_pdf_link
 import spacy
 
-# Load the Spacy model
-# "python -m spacy download en_core_web_sm" in terminal
-nlp = spacy.load("en_core_web_sm")
+# load spacy model
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    print("Model 'en_core_web_sm' not found. Downloading it now...")
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 def process(text):
     doc = nlp(text)

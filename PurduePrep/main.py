@@ -29,7 +29,6 @@ def main(user_input):
     # Step 4: Web crawler uses the query string to produce a list of relevant websites
     websites_list, all_page_scores = init_gather_websites(query_string)
     sorted_relevant_urls = crawl_websites(query_string, websites_list, CRAWL_DEPTH, all_page_scores)
-
     # Web crawler ---(relevant sites list)---> Scraper
     # Step 5: Web scraper extracts information from websites
     questions = []
