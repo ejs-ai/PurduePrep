@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path
 import PyPDF2
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 import re
 from collections import defaultdict
 import time
@@ -32,8 +32,19 @@ def get_websites(search_query):
     else:
         #print("No results found.")
         websites_list.append("-1")
+    
+    # return websites_list
 
-    return websites_list
+    web_pairs_list = []
+    for web_pair_idx in range(0, len(websites_list), 2):
+        web_pair_instance = []
+        web_pair_0 = websites_list[web_pair_idx]
+        web_pair_1 = websites_list[web_pair_idx+1] if web_pair_idx + 1 < len(websites_list) else None
+        web_pair_instance.append(web_pair_0)
+        web_pair_instance.append(web_pair_1)
+        web_pairs_list.append(web_pair_instance)
+
+    return web_pairs_list
 
 def open_url(url_to_scrape):
     try:
@@ -96,28 +107,20 @@ def check_if_exam(text):
     return question_patterns, pattern_indices
 
 def crawl(url, depth, keywords, visited = None, page_scores = None):
+    BLACKLIST_PATTERNS = ['lecture', 'Lecture', 'lec' ,'Syllabus', 'syllabus', 'youtube']
+
     if visited is None:
         visited = set()
     if page_scores is None:
-        page_scores = defaultdict(lambda: (0, []))  # Default to (score, pattern_indices)
-
+        page_scores = defaultdict(lambda: (0, []))
 
     if depth == 0 or url in visited:
         return
-    print(f"Crawling: {url}")
+    #print(f"Crawling: {url}")
     visited.add(url)
 
-    if ("lecture" or "Lecture" or "lec" or "Lec") in url.lower():
-        print(f"Skipping PDF file (contains Lecture): {url}")
-        return
-    
-    if ("syllabus" or "Syllabus") in url.lower():
-        print(f"Skipping PDF file (contains Syllabus): {url}")
-        return
-
-    # Skip YouTube URLs
-    if "youtube" in url or "youtu.be" in url:
-        print(f"Skipping YouTube link: {url}")
+    if any(pattern in url.lower() for pattern in BLACKLIST_PATTERNS):
+        #print(f"Skipping URL (blacklisted pattern): {url}")
         return
     
     ## Fetch PDF content
