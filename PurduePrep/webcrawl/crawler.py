@@ -15,9 +15,15 @@ start_time = time.time()
 websites_list, all_page_scores = init_gather_websites(search_query)
 
 for web_pairs in websites_list:
-    sorted_relevant_urls = crawl_websites(search_query, web_pairs, CRAWL_DEPTH, all_page_scores)
-    print(sorted_relevant_urls)
     crawl_time = time.time()
+
+    sorted_relevant_urls = crawl_websites(search_query, web_pairs, CRAWL_DEPTH, all_page_scores)
+
+    end_time = time.time()
+    print(f"Total time to crawl pair: {end_time - crawl_time} seconds")
+    print('')
+    
+    print(sorted_relevant_urls)
 
     # Extract page content
     for url, score in sorted_relevant_urls:
@@ -25,5 +31,3 @@ for web_pairs in websites_list:
         pdf_text, _ = get_content_from_pdf_link(url)
         page_content = Page(url, pdf_text, relevant_character_indices)
 
-    end_time = time.time()
-    print(f"Total time to crawl pair: {end_time - crawl_time} seconds")

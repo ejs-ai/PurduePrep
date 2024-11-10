@@ -106,21 +106,31 @@ def check_if_exam(text):
     
     return question_patterns, pattern_indices
 
-def crawl(url, depth, keywords, visited = None, page_scores = None):
+def crawl(url, depth, keywords, visited = None, page_scores = None, domain_visit_count = None):
     BLACKLIST_PATTERNS = ['lecture', 'Lecture', 'lec' ,'Syllabus', 'syllabus', 'youtube']
 
     if visited is None:
         visited = set()
+
     if page_scores is None:
         page_scores = defaultdict(lambda: (0, []))
 
+    if domain_visit_count is None:
+        domain_visit_count = defaultdict(int)
+
     if depth == 0 or url in visited:
         return
-    #print(f"Crawling: {url}")
+
+    domain = urlparse(url).netloc
+    print(f"Crawling: {url}")
     visited.add(url)
 
+    if domain_visit_count[domain] >= 150:
+        print(f"Skipping domain {domain} due to crawl limit.")
+        return
+
     if any(pattern in url.lower() for pattern in BLACKLIST_PATTERNS):
-        #print(f"Skipping URL (blacklisted pattern): {url}")
+        print(f"Skipping URL (blacklisted pattern): {url}")
         return
     
     ## Fetch PDF content
@@ -146,7 +156,8 @@ def crawl(url, depth, keywords, visited = None, page_scores = None):
         for link in links:
             next_url = urljoin(url, link['href'])
             if next_url not in visited and re.match(r'^https?://', next_url):
-                crawl(next_url, depth - 1, keywords, visited, page_scores)
+                domain_visit_count[domain] += 1
+                crawl(next_url, depth - 1, keywords, visited, page_scores, domain_visit_count)
 
     return page_scores
 
