@@ -33,22 +33,11 @@ def get_websites(search_query):
         #print("No results found.")
         websites_list.append("-1")
     
-    # return websites_list
-
-    web_pairs_list = []
-    for web_pair_idx in range(0, len(websites_list), 2):
-        web_pair_instance = []
-        web_pair_0 = websites_list[web_pair_idx]
-        web_pair_1 = websites_list[web_pair_idx+1] if web_pair_idx + 1 < len(websites_list) else None
-        web_pair_instance.append(web_pair_0)
-        web_pair_instance.append(web_pair_1)
-        web_pairs_list.append(web_pair_instance)
-
-    return web_pairs_list
+    return websites_list
 
 def open_url(url_to_scrape):
     try:
-        url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=3)
+        url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=1.5)
         if not url_content.ok:
             #print("Could not read content at: " + url_to_scrape)
             url_content = -1
@@ -106,32 +95,41 @@ def check_if_exam(text):
     
     return question_patterns, pattern_indices
 
-def crawl(url, depth, keywords, visited = None, page_scores = None, domain_visit_count = None):
-    BLACKLIST_PATTERNS = ['lecture', 'Lecture', 'lec' ,'Syllabus', 'syllabus', 'youtube']
+def init_gather_websites(keywords_str):
+    websites_list = get_websites(f"{keywords_str} past exam midterm final site:.edu")
+    all_page_scores = defaultdict(int)
+    return websites_list, all_page_scores
+
+def crawl(url, depth, keywords, visited = None, page_scores = None, domain_visit_count = None, blacklist = None, whitelist = None):
 
     if visited is None:
         visited = set()
-
     if page_scores is None:
         page_scores = defaultdict(lambda: (0, []))
-
     if domain_visit_count is None:
         domain_visit_count = defaultdict(int)
-
+    if blacklist is None:
+        blacklist = ['lec','Lecture', 'Syllabus', 'syllabus', 'youtube', 'Youtube']
+    if whitelist is None:
+        whitelist = ['Mid', 'mid', 'final', 'exam', 'Exam']
     if depth == 0 or url in visited:
         return
 
     domain = urlparse(url).netloc
-    print(f"Crawling: {url}")
     visited.add(url)
+    print(f"Crawling: {url}")
 
-    if domain_visit_count[domain] >= 150:
-        print(f"Skipping domain {domain} due to crawl limit.")
+    organization_match = re.search(r'\b(?:[a-zA-Z0-9-]+)\.(edu|ac|com|net|gov)\b', domain)  # Match .edu or .ac domains
+    org_name = organization_match.group(0)
+
+    if domain_visit_count[domain] >= 150 and org_name not in blacklist:
+        blacklist.append(org_name)
         return
 
-    if any(pattern in url.lower() for pattern in BLACKLIST_PATTERNS):
-        print(f"Skipping URL (blacklisted pattern): {url}")
-        return
+    if any(pattern in url.lower() for pattern in blacklist):
+        if not any(pattern in url.lower() for pattern in whitelist):
+            print(f"Skipping URL (blacklisted pattern): {url}")
+            return
     
     ## Fetch PDF content
     if url.lower().endswith('.pdf'):
@@ -157,14 +155,9 @@ def crawl(url, depth, keywords, visited = None, page_scores = None, domain_visit
             next_url = urljoin(url, link['href'])
             if next_url not in visited and re.match(r'^https?://', next_url):
                 domain_visit_count[domain] += 1
-                crawl(next_url, depth - 1, keywords, visited, page_scores, domain_visit_count)
+                crawl(next_url, depth - 1, keywords, visited, page_scores, domain_visit_count, blacklist, whitelist)
 
     return page_scores
-
-def init_gather_websites(keywords_str):
-    websites_list = get_websites(f"{keywords_str} past exam midterm final site:.edu")
-    all_page_scores = defaultdict(int)
-    return websites_list, all_page_scores
 
 def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
     with concurrent.futures.ThreadPoolExecutor() as executor:
