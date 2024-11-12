@@ -35,13 +35,14 @@ def main(user_input):
     for url, score in sorted_relevant_urls:
         relevant_character_indices = score[1]
         pdf_text, _ = get_content_from_pdf_link(url)
-        page_content = Page(url, pdf_text, relevant_character_indices)
+        if pdf_text:
+            page_content = Page(url, pdf_text, relevant_character_indices)
 
-        # Web scraper ---(extracted text)---> Question ID
-        # Step 7: Use NLP to identify questions
-        page_questions = find_questions(page_content)
-        for question in page_questions:
-            questions.append((question, url))
+            # Web scraper ---(extracted text)---> Question ID
+            # Step 7: Use NLP to identify questions
+            page_questions = find_questions(page_content)
+            for question in page_questions:
+                questions.append((question, url))
 
         # Question ID ---(question objects)---> Relevance checker
         # Step 8: Question objects go to relevance checker to be evaluated for content

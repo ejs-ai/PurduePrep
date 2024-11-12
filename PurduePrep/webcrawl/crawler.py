@@ -7,8 +7,8 @@ CRAWL_DEPTH = 2
 #keywords = ['vector', 'row space', 'matrix', 'basis', 'diagonalizable']
 #keywords = ['cryptography', 'key', 'decryption', 'algorithm', 'encryption', 'secret', 'used', 'ciphertext', 'classical', 'plaintext']
 #keywords = ['derivative', 'integral', 'integrate', 'chain', 'differentiate']
-#keywords = ['binary', 'tree', 'bubble sort', 'sort', 'complexity']
-keywords = ['discrete', 'math', 'mathematics']
+keywords = ['binary', 'tree', 'bubble sort', 'sort', 'complexity']
+#keywords = ['discrete', 'math', 'mathematics']
 
 search_query = f"{' '.join(keywords)} past exam midterm final site:.edu"
 
@@ -25,7 +25,8 @@ print(f"Total time to gather relevant sites: {crawl_time - start_time} seconds")
 for url, score in sorted_relevant_urls:
     relevant_character_indices = score[1]
     pdf_text, _ = get_content_from_pdf_link(url)
-    page_content = Page(url, pdf_text, relevant_character_indices)
+    if pdf_text:
+        page_content = Page(url, pdf_text, relevant_character_indices)
 
 end_time = time.time()
 print(f"Total time to pull web content: {end_time - crawl_time} seconds")

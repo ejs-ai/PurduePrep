@@ -23,9 +23,10 @@ print(sorted_relevant_urls)
 questions = []
 for url, score in sorted_relevant_urls:
     pdf_text, _ = get_content_from_pdf_link(url)
-    page_content = Page(url, pdf_text, score[1])
-    start_nlp_time = time.time()
-    questions.extend(find_questions(page_content))
+    if pdf_text:
+        page_content = Page(url, pdf_text, score[1])
+        start_nlp_time = time.time()
+        questions.extend(find_questions(page_content))
 
 for question in questions:
     print(question)
