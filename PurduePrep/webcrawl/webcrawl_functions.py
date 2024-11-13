@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path
 import PyPDF2
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 import re
 from collections import defaultdict
 import time
@@ -30,47 +30,22 @@ def get_websites(search_query):
         for link_number in range(num_links):
             websites_list.append(results['items'][link_number]['link'])
     else:
-        #print("No results found.")
         websites_list.append("-1")
-
+    
     return websites_list
 
 def open_url(url_to_scrape):
     try:
-        url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=3)
+        url_content = requests.get(url=url_to_scrape, headers={'User-Agent': "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}, timeout=1.5)
         if not url_content.ok:
-            #print("Could not read content at: " + url_to_scrape)
             url_content = -1
         return url_content
     
     except requests.exceptions.Timeout:
-        #print(f"Timeout occurred while trying to retrieve {url_to_scrape}. Skipping.")
         return -1 # Skip this URL if it times out
     
     except requests.RequestException as e:
-        #print(f"Failed to retrieve {url_to_scrape}: {e}")
         return  -1 # Handle other request exceptions
-
-def get_content_from_pdf_link(url):
-    title_page_multiplier = 1
-    pdf_content = open_url(url)
-    
-    if pdf_content == -1:
-        return False, title_page_multiplier
-    
-    pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content.content))
-    pdf_text = ""
-
-    if len(pdf_reader.pages) > 20:
-        return False, title_page_multiplier
-
-    if ("exam" or "Exam" or "midterm" or "Midterm" or "final" or "Final") in pdf_reader.pages[0].extract_text():
-        title_page_multiplier = 1.5
-    
-    for page_num in range(len(pdf_reader.pages)):
-        pdf_text += pdf_reader.pages[page_num].extract_text()
-    
-    return pdf_text, title_page_multiplier
 
 def get_webcrawl_functions_path():
     current_dir = Path(__file__).resolve()
@@ -95,62 +70,104 @@ def check_if_exam(text):
     
     return question_patterns, pattern_indices
 
-def crawl(url, depth, keywords, visited = None, page_scores = None):
-    if visited is None:
-        visited = set()
-    if page_scores is None:
-        page_scores = defaultdict(lambda: (0, []))  # Default to (score, pattern_indices)
-
-
-    if depth == 0 or url in visited:
-        return
-    print(f"Crawling: {url}")
-    visited.add(url)
-
-    if ("lecture" or "Lecture" or "lec" or "Lec") in url.lower():
-        print(f"Skipping PDF file (contains Lecture): {url}")
-        return
-    
-    if ("syllabus" or "Syllabus") in url.lower():
-        print(f"Skipping PDF file (contains Syllabus): {url}")
-        return
-
-    # Skip YouTube URLs
-    if "youtube" in url or "youtu.be" in url:
-        print(f"Skipping YouTube link: {url}")
-        return
-    
-    ## Fetch PDF content
-    if url.lower().endswith('.pdf'):
-        #Open PDF and get its text
-        pdf_text, title_page_multiplier = get_content_from_pdf_link(url)
-        if pdf_text:
-            score, pattern_indices = check_if_exam(pdf_text)
-            page_scores[url] = (score *title_page_multiplier, pattern_indices)
-            
-    ## If not PDF, keep looking for a DARN PDF
-    else:
-        http_request_response = open_url(url)
-        if http_request_response == -1:
-            return
-        
-        # Parse html
-        soup = BeautifulSoup(http_request_response.text, 'html.parser')
-        page_text = soup.get_text()
-        
-        # Find all the links on the page and crawl them
-        links = soup.find_all('a', href=True)
-        for link in links:
-            next_url = urljoin(url, link['href'])
-            if next_url not in visited and re.match(r'^https?://', next_url):
-                crawl(next_url, depth - 1, keywords, visited, page_scores)
-
-    return page_scores
-
 def init_gather_websites(keywords_str):
     websites_list = get_websites(f"{keywords_str} past exam midterm final site:.edu")
     all_page_scores = defaultdict(int)
     return websites_list, all_page_scores
+
+def update_lists(url, blacklist, visited, domain_visit_count):
+    domain = urlparse(url).netloc
+
+    organization_match = re.search(r'\b(?:[a-zA-Z0-9-]+)\.(edu|ac|com|net|gov)\b', domain)
+    org_name = organization_match.group(0)
+
+    if domain_visit_count[domain] >= 150 and org_name not in blacklist:
+        blacklist.append(org_name)
+    
+    visited.add(url)
+    return blacklist, visited, domain
+
+def get_content_from_pdf_link(url):
+    title_page_multiplier = 1
+    pdf_content = open_url(url)
+    
+    if pdf_content == -1:
+        return False, title_page_multiplier
+    
+    pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content.content))
+    pdf_text = ""
+
+    if len(pdf_reader.pages) > 20:
+        return False, title_page_multiplier
+
+    if ("exam" or "Exam" or "midterm" or "Midterm" or "final" or "Final") in pdf_reader.pages[0].extract_text():
+        title_page_multiplier = 1.5
+    
+    for page_num in range(len(pdf_reader.pages)):
+        pdf_text += pdf_reader.pages[page_num].extract_text()
+
+    return pdf_text, title_page_multiplier
+
+def search_pdf(url):
+    #Open PDF and get its text
+    pdf_text, title_page_multiplier = get_content_from_pdf_link(url)
+    if pdf_text:
+        score, pattern_indices = check_if_exam(pdf_text)
+        page_score = (score *title_page_multiplier, pattern_indices)
+        return page_score
+    return (0,[])
+
+def initialize_crawl_defaults(visited=None, page_scores=None, domain_visit_count=None, blacklist=None, whitelist=None):
+    if visited is None:
+        visited = set()
+    if page_scores is None:
+        page_scores = defaultdict(lambda: (0, []))
+    if domain_visit_count is None:
+        domain_visit_count = defaultdict(int)
+    if blacklist is None:
+        blacklist = ['lec', 'Lecture', 'Syllabus', 'syllabus', 'youtube', 'Youtube']
+    if whitelist is None:
+        whitelist = ['Mid', 'mid', 'final', 'exam', 'Exam']
+    
+    return visited, page_scores, domain_visit_count, blacklist, whitelist
+
+def get_page_links(url):
+    http_request_response = open_url(url)
+    if http_request_response == -1:
+        return
+    soup = BeautifulSoup(http_request_response.text, 'html.parser')
+    links = soup.find_all('a', href=True)
+    return links
+
+def crawl(url, depth, keywords, visited = None, page_scores = None, domain_visit_count = None, blacklist = None, whitelist = None):
+    
+    visited, page_scores, domain_visit_count, blacklist, whitelist = initialize_crawl_defaults(
+        visited, page_scores, domain_visit_count, blacklist, whitelist)
+    
+    if depth == 0 or url in visited:
+        return
+    
+    print(f"Crawling: {url}")
+    blacklist, visited, domain = update_lists(url, blacklist, visited, domain_visit_count)
+    if any(pattern in url.lower() for pattern in blacklist):
+        if not any(pattern in url.lower() for pattern in whitelist):
+            print(f"Skipping URL (blacklisted pattern): {url}")
+            return
+    
+    ## Fetch PDF content
+    if url.lower().endswith('.pdf'):
+        page_scores[url] = search_pdf(url)
+            
+    ## If not PDF, continue crawl
+    else:
+        links = get_page_links(url)
+        for link in links:
+            next_url = urljoin(url, link['href'])
+            if next_url not in visited and re.match(r'^https?://', next_url):
+                domain_visit_count[domain] += 1
+                crawl(next_url, depth - 1, keywords, visited, page_scores, domain_visit_count, blacklist, whitelist)
+
+    return page_scores
 
 def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
     with concurrent.futures.ThreadPoolExecutor() as executor:
