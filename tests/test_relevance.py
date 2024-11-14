@@ -1,7 +1,8 @@
-from PurduePrep.main import main
+from PurduePrep.scrape.relevance import *
 
-if __name__ == '__main__':
-    test_input = """AES is a block cipher with a block length of 128 bits.
+if __name__ == '__main__': 
+    # test sentences
+    user_in = """AES is a block cipher with a block length of 128 bits.
  AES allows for three different key lengths: 128, 192, or 256 bits.
 Most of our discussion will assume that the key length is 128
 bits. [With regard to using a key length other than 128 bits,
@@ -119,37 +120,17 @@ generally, DES also involves substitutions and permutations,
 except that the permutations are based on the Feistel notion of
 dividing the input block into two halves, processing each half
 separately, and then swapping the two halves.
+
+
 """
-# This test input makes the scrape only look at one site. Why?
-    test_input2 = """
-Primitive joints can be arranged in parallel as well as in series. Figure 3.2.1 illustrates
-such a parallel link mechanism. It is a five-bar-linkage consisting of five links, including the base
-link, connected by five joints. This can be viewed as two serial linkage arms connected at a
-particular point, point A in the figure. It is important to note that there is a closed kinematic chain
-formed by the five links and, thereby, the two serial link arms must conform to a certain
-geometric constraint. It is clear from the figure that the end-effecter position is determined if two
-of the five joint angles are given. For example, if angles 1? and 3? of joints 1 and 3 are
-determined, then all the link positions are determined, as is the end-effecter’s. Driving joints 1
-Figure 3.1.7 Gravity-balanced robot with three-revolute joints
-Photo removed for copyright reasons.
-Figure 3.2.3 Stewart mechanism parallel-link robot
-Figure by MIT OCW.
-Department of Mechanical Engineering Massachusetts Institute of Technology
-Figure 3.2.3 shows the Stewart mechanism, which consists of a moving platform, a fixed
-base, and six powered cylinders connecting the moving platform to the base frame. The position
-and orientation of the moving platform are determined by the six independent actuators. The load
-acting on the moving platform is born by the six "arms". Therefore, the load capacity is generally
-large, and dynamic response is fast for this type of robot mechanisms. Note, however, that this
- mechanism has spherical joints, a different type of joints than the primitive joints we considered
- initially.
-Figure 3.2.2 Heavy-duty robot with parallel link mechanism
-Diagram removed for copyright reasons.
- This type of parallel linkage, having a closed-loop kinematic chain, has significant
-features. First, placing both actuators at the base link makes the robot arm lighter, compared to
-the serial link arm with the second motor fixed to the tip of link 1. Second, a larger end-effecter
-load can be born with the two serial linkage arms sharing the load. Figure 3.2.2 shows a heavyduty robot having a parallel link mechanism
-"""
-    questions = main(test_input)
-    print(len(questions))
-    for q, url in questions:
-        print(q + '\n\nEND QUESTION\n\n')
+    sentences = ["What color are roses?", "Calculate the derivate of x^2.", 
+                 "Show how the decryption works. Formulate the encryption and decryption equations.", 
+                 "	The actor John Gielgud believed that of all Shakespeare's characters Hamlet is probably the one most like Shakespeare himself–since, of all Shakespeare's characters, only Hamlet can be imagined to have written all the Shakespearean plays. How good an understanding of Hamlet's character does Gielgud's belief reflect?", 
+                 "	What part should intent play in determining the punishment for crime? (For instance, if a man attempts to kill another man but fails to kill him and, instead, only wounds him, should he receive any lighter a sentence than the man who intends to kill another man and succeeds in doing so?)",
+                 "In the DES Feistel function, if the values in the S-boxes were all set to 0, the DES output ciphertext would be equal to the input plaintext. Explain why this is the case.",
+                 "What would happen in DES encryption if, in addition to all the S-boxes set to 0, all the numbers in the P-box are set to zero? Your answer should explain what happens to the final ciphertext as well as what happens to the P-box output block (i.e. the immediate output after applying the new P-box permutation)."]
+    
+    ranked = rank_questions(user_in, sentences)
+    filtered = filter_questions(user_in, sentences)
+    print(ranked)
+    print(filtered)
