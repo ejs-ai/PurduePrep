@@ -1,19 +1,18 @@
 import numpy as np
-from PurduePrep.webcrawl.webcrawl_functions import open_url, get_content_from_pdf_link
 import spacy
 
 # load spacy model
 try:
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_md")
 except OSError:
-    print("Model 'en_core_web_sm' not found. Downloading it now...")
-    spacy.cli.download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+    print("Model 'en_core_web_md' not found. Downloading it now...")
+    spacy.cli.download("en_core_web_md")
+    nlp = spacy.load("en_core_web_md")
 
 def process(text):
     doc = nlp(text)
     sents = list(doc.sents)
-    vecs = np.stack([sent.vector / sent.vector_norm for sent in sents])
+    vecs = np.stack([sent.vector / sent.vector_norm if sent.vector_norm != 0 else np.zeros_like(sent.vector) for sent in sents])
 
     return sents, vecs
 

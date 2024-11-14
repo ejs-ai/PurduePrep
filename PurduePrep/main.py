@@ -6,6 +6,7 @@ from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link, in
 from PurduePrep.webcrawl.page import Page
 from PurduePrep.webcrawl.query_build import build_query
 from PurduePrep.scrape.find_questions import find_questions
+from PurduePrep.scrape.relevance import rank_questions
 
 MAX_NUM_QUESTIONS = 5
 CRAWL_DEPTH = 2
@@ -44,14 +45,10 @@ def main(user_input):
             for question in page_questions:
                 questions.append((question, url))
 
-        # Question ID ---(question objects)---> Relevance checker
-        # Step 8: Question objects go to relevance checker to be evaluated for content
-
-        # Question ID ---(question objects)---> Relevance checker
-        # Step 8: Question objects go to relevance checker to be evaluated for content
-
-        # Relevance checker ---(list of question objects)---> Output handler
-        # Step 9: Output handler loops through list of question objects and packages to the website
+    questions = rank_questions(user_input, questions)
+    questions = questions[:MAX_NUM_QUESTIONS]
+    # Question ID ---(question objects)---> Relevance checker
+    # Step 8: Question objects go to relevance checker to be evaluated for content
 
         # Output handler ---(output)---> Website
 
