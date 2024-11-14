@@ -321,7 +321,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: '8px',
     cursor: 'pointer',
     marginTop: '10px',
-    fontSize: '1rem',
     fontFamily: '"Cantora One", sans-serif',
     transition: 'transform 0.2s ease, box-shadow 0.2s ease',
     ':hover': {
