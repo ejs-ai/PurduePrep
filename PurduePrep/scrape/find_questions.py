@@ -28,7 +28,7 @@ def load_model():
     dev = device("cuda" if cuda.is_available() else "cpu")
     tokenizer = BertTokenizer.from_pretrained(bert_model_name)
     model = BERTClassifier(bert_model_name, num_classes)
-    model.load_state_dict(load('PurduePrep\\scrape\\bert_classifier.pth', weights_only=True, map_location=dev))
+    model.load_state_dict(load('bert.pth', weights_only=True, map_location=dev))
     return model, tokenizer, dev
 
 def find_questions(page):
