@@ -16,7 +16,6 @@ def predict_sentences(sentences, model, tokenizer, dev):
     for input in sentences:
         pred = predict_question(input, model, tokenizer, dev)
         output.append(pred)
-    print(output)
     return output
 
 def regex_filter(text):
