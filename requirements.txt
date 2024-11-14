@@ -9,6 +9,4 @@ Requests==2.32.3
 scikit_learn==1.5.2
 spacy==3.8.2
 torch==2.5.1
-tqdm==4.66.5
-tqdm==4.67.0
 transformers==4.46.2
