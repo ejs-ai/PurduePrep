@@ -7,10 +7,9 @@ from PurduePrep.webcrawl.page import Page
 from PurduePrep.webcrawl.query_build import build_query
 from PurduePrep.scrape.find_questions import find_questions
 
-MAX_NUM_QUESTIONS = 5
 CRAWL_DEPTH = 2
 
-def main(user_input):
+def main(user_input, num_questions):
     # Step 0: Initialize the website?
     # This is handled in app.py
     # Step 1: Retrieve input from the user (text, pdf, or image). App.py handles processing of the input type and calls this function with a string
@@ -44,6 +43,9 @@ def main(user_input):
             for question in page_questions:
                 questions.append((question, url))
 
+            if len(questions) >= num_questions:
+                break
+
         # Question ID ---(question objects)---> Relevance checker
         # Step 8: Question objects go to relevance checker to be evaluated for content
 
@@ -55,4 +57,4 @@ def main(user_input):
 
         # Output handler ---(output)---> Website
 
-    return questions
+    return questions[:num_questions]
