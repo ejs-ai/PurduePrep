@@ -9,10 +9,12 @@ interface QuestionData {
 const Home: React.FC = () => {
   const [inputText, setInputText] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filename, setFilename] = useState<string>('');
   const [questions, setQuestions] = useState<QuestionData[]>([]);  // For questions and URLs
   const [error, setError] = useState<string | null>(null);  // For error handling
   const [loading, setLoading] = useState<boolean>(false);
   const [timeoutReached, setTimeoutReached] = useState<boolean>(false); // To control error timeout
+  const [numQuestions, setNumQuestions] = useState<number>(15); // Default to 15 questions
 
   // Handle input via text or file
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -23,7 +25,13 @@ const Home: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
+    setFilename(file ? file.name : '');  // Update filename state
     setInputText('');  // Clear text input if file is selected
+  };
+
+  const handleNumQuestionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = Math.min(Math.max(Number(event.target.value), 1), 30); // Restrict max value to 30
+    setNumQuestions(value);
   };
 
   // Send input (text or file) to Flask backend
@@ -35,6 +43,7 @@ const Home: React.FC = () => {
       if (selectedFile) {
         const formData = new FormData();
         formData.append('file', selectedFile);
+        formData.append('numQuestions', numQuestions.toString());
         
         response = await fetch('/api/receive-text', {
           method: 'POST',
@@ -47,7 +56,10 @@ const Home: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ inputText: inputText }),
+          body: JSON.stringify({ 
+            inputText: inputText,
+            numQuestions: numQuestions // Add numQuestions to JSON payload
+          }),
         });
       }
       
@@ -64,16 +76,20 @@ const Home: React.FC = () => {
     }
   };
 
+  // Timeout function
+  const setErrorTimeout = () => {
+    return setTimeout(() => {
+      setTimeoutReached(true); // Flag that we have hit the timeout
+      setError('Failed to load questions.');  // Show error after timeout
+    }, 60000);  // Timeout set for 60 seconds
+  };
+
   // Fetch questions from the Flask backend
   const fetchQuestions = async () => {
     setLoading(true);  // Start loading when request starts
     setError(null);  // Clear any previous errors
   
-    // Set a timeout to show an error message after 5 seconds if nothing happens
-    const errorTimeout = setTimeout(() => {
-      setTimeoutReached(true); // Flag that we have hit the timeout
-      setError('Failed to load questions.');  // Show error after timeout
-    }, 60000);  // 60 seconds delay
+    const errorTimeout = setErrorTimeout(); // Start timeout when fetching questions
   
     try {
       const response = await fetch('http://127.0.0.1:5328/api/get-questions');  // Adjust URL based on your setup
@@ -126,8 +142,27 @@ const Home: React.FC = () => {
             wrap="soft"
           />
           <br />
-          <input type="file" onChange={handleFileChange} />
+          <label htmlFor="file-upload" style={styles.fileUploadButton}>Choose File</label>
+          <input 
+            id="file-upload" 
+            type="file" 
+            onChange={handleFileChange} 
+            style={styles.hiddenFileInput} 
+          />
+          <span style={styles.filenameDisplay}>{filename || 'No file chosen'}</span>
           <br />
+          <div style={styles.numQuestionsContainer}>
+            <label style={styles.numQuestionsLabel} htmlFor="numQuestions">Number of Questions:</label>
+            <input
+              type="number"
+              id="numQuestions"
+              value={numQuestions}
+              min="1"
+              max="30"
+              onChange={handleNumQuestionsChange}
+              style={styles.numQuestionsInput}
+            />
+          </div>
           <button onClick={handleSubmit} style={styles.submitButton}>Submit</button>
         </div>
 
@@ -234,15 +269,60 @@ const styles: { [key: string]: React.CSSProperties } = {
       boxShadow: '0 0 20px rgba(255, 215, 0, 0.8)',  // Stronger glow on focus
     },
   },
+  hiddenFileInput: {
+    display: 'none',  // Hide the default file input
+  },
+  fileUploadButton: {
+    backgroundColor: '#FFED89',  // Match your theme's gold color
+    color: '#333333',
+    padding: '5px 5px',
+    fontSize: '1rem',
+    fontFamily: '"Cantora One", sans-serif',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+  },
+  fileUploadButtonHover: {
+    backgroundColor: '#FFC107',  // Slightly darker gold on hover
+  },
+  filenameDisplay: {
+    color: '#FFED89',
+    fontSize: '1rem',
+    fontFamily: '"Cantora One", sans-serif',
+    padding: '5px 5px',
+  },
+  numQuestionsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '10px 0',
+    color: '#FFED89',
+  },
+  numQuestionsLabel: {
+    marginRight: '10px',
+    fontWeight: 'bold',
+  },
+  numQuestionsInput: {
+    width: '60px',
+    padding: '5px',
+    borderRadius: '5px',
+    backgroundColor: '#444444',
+    color: '#FFED89',
+    border: '1px solid #FFED89',
+    textAlign: 'center',
+    fontFamily: '"Cantora One", sans-serif',
+  },
   submitButton: {
     padding: '10px 20px',
     fontSize: '1.2rem',
     backgroundColor: '#FFED89',
-    color: '#000000',
+    color: '#1a1a1a',
     border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',
     marginTop: '10px',
+    fontSize: '1rem',
+    fontFamily: '"Cantora One", sans-serif',
     transition: 'transform 0.2s ease, box-shadow 0.2s ease',
     ':hover': {
       transform: 'scale(1.1)',  // Slight zoom on hover
