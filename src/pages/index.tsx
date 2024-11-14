@@ -264,10 +264,10 @@ const styles: { [key: string]: React.CSSProperties } = {
     resize: 'vertical',
     boxShadow: '0 0 15px rgba(255, 215, 0, 0.5)',  // Gold glow effect
     outline: 'none',  // Remove default outline
-    transition: 'box-shadow 0.3s ease',
-    ':focus': {
-      boxShadow: '0 0 20px rgba(255, 215, 0, 0.8)',  // Stronger glow on focus
-    },
+    // transition: 'box-shadow 0.3s ease',
+    // ':focus': {
+    //   boxShadow: '0 0 20px rgba(255, 215, 0, 0.8)',  // Stronger glow on focus
+    // },
   },
   hiddenFileInput: {
     display: 'none',  // Hide the default file input
