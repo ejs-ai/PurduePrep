@@ -281,7 +281,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
+    // transition: 'background-color 0.3s ease',
   },
   fileUploadButtonHover: {
     backgroundColor: '#FFC107',  // Slightly darker gold on hover
@@ -322,11 +322,11 @@ const styles: { [key: string]: React.CSSProperties } = {
     cursor: 'pointer',
     marginTop: '10px',
     fontFamily: '"Cantora One", sans-serif',
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-    ':hover': {
-      transform: 'scale(1.1)',  // Slight zoom on hover
-      boxShadow: '0 0 15px rgba(255, 215, 0, 0.5)',
-    },
+    // transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    // ':hover': {
+    //   transform: 'scale(1.1)',  // Slight zoom on hover
+    //   boxShadow: '0 0 15px rgba(255, 215, 0, 0.5)',
+    // },
   },
   questionContainer: {
     width: '100%',
