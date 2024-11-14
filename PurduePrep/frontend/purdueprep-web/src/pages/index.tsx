@@ -76,16 +76,20 @@ const Home: React.FC = () => {
     }
   };
 
+  // Timeout function
+  const setErrorTimeout = () => {
+    return setTimeout(() => {
+      setTimeoutReached(true); // Flag that we have hit the timeout
+      setError('Failed to load questions.');  // Show error after timeout
+    }, 60000);  // Timeout set for 60 seconds
+  };
+
   // Fetch questions from the Flask backend
   const fetchQuestions = async () => {
     setLoading(true);  // Start loading when request starts
     setError(null);  // Clear any previous errors
   
-    // Set a timeout to show an error message after 5 seconds if nothing happens
-    const errorTimeout = setTimeout(() => {
-      setTimeoutReached(true); // Flag that we have hit the timeout
-      setError('Failed to load questions.');  // Show error after timeout
-    }, 60000);  // 60 seconds delay
+    const errorTimeout = setErrorTimeout(); // Start timeout when fetching questions
   
     try {
       const response = await fetch('http://127.0.0.1:5328/api/get-questions');  // Adjust URL based on your setup
