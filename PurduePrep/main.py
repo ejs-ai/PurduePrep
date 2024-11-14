@@ -44,9 +44,9 @@ def main(user_input, num_questions):
             for question in page_questions:
                 questions.append((question, url))
 
-        # Question ID ---(question objects)---> Relevance checker
-        # Step 8: Question objects go to relevance checker to be evaluated for content
-        questions = rank_questions(user_input, questions)
+    # Question ID ---(question objects)---> Relevance checker
+    # Step 8: Question objects go to relevance checker to be evaluated for content
+    questions = rank_questions(user_input, questions)
 
         # Relevance checker ---(list of question objects)---> Output handler
         # Step 9: Output handler loops through list of question objects and packages to the website
