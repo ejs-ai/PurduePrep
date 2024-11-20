@@ -102,6 +102,7 @@ const Home: React.FC = () => {
         setTimeoutReached(false); // Reset timeout flag
       } else {
         setError('Failed to load questions.');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error fetching questions:', error);
