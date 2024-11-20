@@ -24,14 +24,14 @@ def main(user_input, num_questions):
     # Input handler ---(string)---> Query builder
     # Step 3: Query builder processes all user's gibberish, extracts relevant info, forms query string
     query_string = build_query(user_input)
-    return [("query string", query_string)]
+    # return [("query string", query_string)]
 
     # Query builder ---(query string)---> Web crawler
     # Step 4: Web crawler uses the query string to produce a list of relevant websites
     websites_list, all_page_scores = init_gather_websites(query_string)
-    return [("gathered websites", "gathered not crawled")]
+    #return [("gathered websites", "gathered not crawled")]
     sorted_relevant_urls = crawl_websites(query_string, websites_list, CRAWL_DEPTH, all_page_scores)
-    return [("gathered websites", "gathered not crawled")]
+    #return [("websites are crawled", "crawled no questions")]
     # Web crawler ---(relevant sites list)---> Scraper
     # Step 5: Web scraper extracts information from websites
     questions = []
@@ -46,7 +46,7 @@ def main(user_input, num_questions):
             page_questions = find_questions(page_content)
             for question in page_questions:
                 questions.append((question, url))
-
+    #return [("questions obtained", "not sorted for relevance")]
     # Question ID ---(question objects)---> Relevance checker
     # Step 8: Question objects go to relevance checker to be evaluated for content
     questions = rank_questions(user_input, questions)
