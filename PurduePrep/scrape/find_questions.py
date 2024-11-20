@@ -4,7 +4,7 @@ from PurduePrep.webcrawl.page import Page
 from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link
 from transformers import BertTokenizer
 from PurduePrep.scrape.bert_functions import BERTClassifier, predict_question
-from torch import load, device, cuda
+from torch import load, device
 MAX_TEXT_LENGTH = 1000000
 
 ### TEST URLS
@@ -25,7 +25,7 @@ def regex_filter(text):
 def load_model():
     bert_model_name = 'bert-base-uncased'
     num_classes = 2
-    dev = device("cuda" if cuda.is_available() else "cpu")
+    dev = device("cpu")
     tokenizer = BertTokenizer.from_pretrained(bert_model_name)
     model = BERTClassifier(bert_model_name, num_classes)
     model.load_state_dict(load('PurduePrep\\scrape\\bert_classifier.pth', weights_only=True, map_location=dev))

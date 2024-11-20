@@ -11,6 +11,7 @@ from PurduePrep.scrape.relevance import rank_questions
 CRAWL_DEPTH = 2
 
 def main(user_input, num_questions):
+    print("in main")
     # Step 0: Initialize the website?
     # This is handled in app.py
     # Step 1: Retrieve input from the user (text, pdf, or image). App.py handles processing of the input type and calls this function with a string
