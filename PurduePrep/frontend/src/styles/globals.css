@@ -48,3 +48,193 @@ body {
   0% { transform: scale(1); }
   100% { transform: scale(1.05); }
 }
+
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a, #333333);
+  color: #FFED89;
+  font-family: "Cantora One", sans-serif;
+  position: relative;
+}
+
+/* Logo */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* Title and Explanation */
+.title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: #FFED89;
+  text-shadow: 2px 2px 10px rgba(255, 215, 0, 0.8);
+  animation: scaleUp 2s infinite alternate;
+}
+
+.explanation {
+  font-size: 1.2rem;
+  text-align: center;
+  max-width: 80%;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* Columns */
+.columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.left-column, .right-column {
+  flex: 1;
+  margin: 0 20px;
+}
+
+/* Subheader */
+.subheader {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-weight: 400;
+  text-shadow: 1px 1px 5px rgba(255, 215, 0, 0.8);
+}
+
+/* Textarea and Inputs */
+.textarea {
+  width: 100%;
+  height: 300px;
+  padding: 10px;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  border: 2px solid #FFED89;
+  background-color: #1a1a1a;
+  color: #FFED89;
+  resize: vertical;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  outline: none;
+}
+
+.num-questions-input {
+  width: 45px;
+  padding: 2px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  border: 2px solid #FFED89;
+  background-color: #444444;
+  color: #FFED89;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  text-align: 'center';
+  font-family: "Cantora One", sans-serif;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+/* File Upload Button */
+.file-upload-button {
+  background-color: #FFED89;
+  color: #333333;
+  padding: 3px 5px;
+  font-size: 1rem;
+  font-family: "Cantora One", sans-serif;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.file-upload-button:hover {
+  background-color: #FFC107;
+}
+
+/* Number of Questions */
+.num-questions-container {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #FFED89;
+}
+
+.num-questions-label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* Buttons */
+.submit-button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #FFED89;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: 'Cantora One', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: scale(1.05);  /* Slightly enlarges the button on hover */
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);  /* Adds a glow effect */
+}
+
+.submit-button:active {
+  transform: scale(0.95);  /* Makes the button appear pressed */
+  background-color: #FFC107;  /* Changes to a slightly darker color */
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);  /* Slightly reduce shadow */
+}
+
+/* Questions Section */
+
+/* Scrollable question container */
+.questionContainer {
+  width: 100%;
+  max-height: 400px; /* Set max height */
+  overflow-y: auto; /* Enable vertical scroll */
+  padding-right: 10px;
+}
+
+.questionBlock {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.questionCard {
+  background-color: #333333;
+  color: #FFED89;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid #FFED89;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  color: #FFED89;
+}
+
+.urlText {
+  font-size: 0.9rem;
+  color: #FFED89;
+  text-decoration: underline; 
+}
+
+.error {
+  color: #FFED89;
+}
