@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "purdueprep"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "A modern solution for exam preparation"
+authors = ["Seth Kricheff, Emma Teff, Joshua Kamphuis"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -28,6 +28,7 @@ transformers = "^4.46.2"
 scikit-learn = "^1.5.2"
 torch = "^2.5.1"
 faiss-cpu = "^1.9.0"
+cyclonedx-bom = "^5.1.1"
 
 [build-system]
 requires = ["poetry-core"]
