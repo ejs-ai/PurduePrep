@@ -67,5 +67,5 @@ def get_questions():
 
     return jsonify({"questions": questions_with_urls})
 
-if __name__ == '__main__':
-    app.run(port=5328)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5328)

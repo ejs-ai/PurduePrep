@@ -10,7 +10,7 @@ import time
 import concurrent.futures
 
 def get_websites(search_query):
-    with open(get_webcrawl_functions_path() + '\\google_search_api.txt', 'r') as file:
+    with open(get_webcrawl_functions_path() + '/google_search_api.txt', 'r') as file:
         API_KEY = file.read().strip()
     SEARCH_ENGINE_ID = "7153013e76dda42f8"
 

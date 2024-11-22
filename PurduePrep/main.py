@@ -32,8 +32,10 @@ def main(user_input, num_questions):
     sorted_relevant_urls = crawl_websites(query_string, websites_list, CRAWL_DEPTH, all_page_scores)
     # Web crawler ---(relevant sites list)---> Scraper
     # Step 5: Web scraper extracts information from websites
+    print("crawl over")
     questions = []
     for url, score in sorted_relevant_urls:
+        print("scraping " + str(url))
         relevant_character_indices = score[1]
         pdf_text, _ = get_content_from_pdf_link(url)
         if pdf_text:

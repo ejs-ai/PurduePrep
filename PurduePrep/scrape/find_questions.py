@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 from PurduePrep.scrape.split_page import split_page
 from PurduePrep.webcrawl.page import Page
 from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link
@@ -22,13 +23,24 @@ def regex_filter(text):
     pattern = r'(^\d+\.|^[a-zA-Z]\.\s*[\s\S]*?(?:\?|\.|\:)|(\b(What|Why|How|Explain|Describe|Define|List|Which|When|Where|Calculate|Compare|Discuss|Name|Identify|Solve|Determine|Recover|Convert|Compute)\b[\s\S]*?[?.:])|(\b(Show|Formulate|Demonstrate|Design|Construct|Prove|Provide|Find|Use)\b[\s\S]*?(work|equation|steps|solution|method|equations|process|procedure)[\s\S]*?[.:])|(\•\s*[\s\S]+))'
     return bool(re.search(pattern, text))
 
+def get_scrape_path():
+    current_dir = Path(__file__).resolve()
+    for parent in current_dir.parents:
+        if parent.name == 'PurduePrep':
+            purdue_prep_dir = parent
+            break
+    else:
+        raise FileNotFoundError("Could not locate the 'PurduePrep' directory")
+    webcrawl_functions_path = purdue_prep_dir / 'scrape'
+    return str(webcrawl_functions_path)
+
 def load_model():
     bert_model_name = 'bert-base-uncased'
     num_classes = 2
     dev = device("cpu")
     tokenizer = BertTokenizer.from_pretrained(bert_model_name)
     model = BERTClassifier(bert_model_name, num_classes)
-    model.load_state_dict(load('PurduePrep\\scrape\\bert_classifier.pth', weights_only=True, map_location=dev))
+    model.load_state_dict(load(get_scrape_path() + '/bert_classifier.pth', weights_only=True, map_location=dev))
     return model, tokenizer, dev
 
 def find_questions(page):
