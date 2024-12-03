@@ -2,14 +2,14 @@
 FROM node:18-slim
 
 # Set the working directory
-WORKDIR /frontend
+WORKDIR /
 
 # Copy the package.json and install dependencies
-COPY frontend/package.json frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy the source code into the container
-COPY frontend/ ./
+COPY . .
 
 # Build the frontend (for production)
 RUN npm run build
