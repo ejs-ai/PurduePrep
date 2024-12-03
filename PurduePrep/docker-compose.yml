@@ -2,10 +2,10 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: frontend/Dockerfile
     ports:
-      - "80:3000" # Change to 80:3000 for deployment outside localhost
-    working_dir: /
+      - "3000:3000" # Change to 80:3000 for deployment outside localhost
+    working_dir: /frontend
     command: npm start
 
   backend:
