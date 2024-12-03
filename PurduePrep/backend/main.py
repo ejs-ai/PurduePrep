@@ -2,11 +2,11 @@
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
 
-from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
-from PurduePrep.webcrawl.page import Page
-from PurduePrep.webcrawl.query_build import build_query
-from PurduePrep.scrape.find_questions import find_questions
-from PurduePrep.scrape.relevance import rank_questions
+from backend.webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
+from backend.webcrawl.page import Page
+from backend.webcrawl.query_build import build_query
+from backend.scrape.find_questions import find_questions
+from backend.scrape.relevance import rank_questions
 
 CRAWL_DEPTH = 2
 
@@ -56,3 +56,6 @@ def main(user_input, num_questions):
         # Output handler ---(output)---> Website
         # app.py is the output handler, which includes the calling function for main
     return questions[:num_questions]
+
+if __name__ == '__main__':
+    print("test")

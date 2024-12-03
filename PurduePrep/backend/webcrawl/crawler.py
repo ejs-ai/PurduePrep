@@ -1,5 +1,5 @@
-from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
-from PurduePrep.webcrawl.page import Page
+from backend.webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
+from backend.webcrawl.page import Page
 import time
 
 CRAWL_DEPTH = 2

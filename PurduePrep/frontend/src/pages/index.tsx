@@ -45,13 +45,13 @@ const Home: React.FC = () => {
         formData.append('file', selectedFile);
         formData.append('numQuestions', numQuestions.toString());
         
-        response = await fetch('/api/receive-text', {
+        response = await fetch('http://backend:5328/api/receive-text', {
           method: 'POST',
           body: formData,
         });
       } else {
         // Otherwise, send text input as JSON
-        response = await fetch('/api/receive-text', {
+        response = await fetch('http://backend:5328/api/receive-text', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
     const errorTimeout = setErrorTimeout(); // Start timeout when fetching questions
   
     try {
-      const response = await fetch('http://127.0.0.1:5328/api/get-questions');  // Adjust URL based on your setup
+      const response = await fetch('http://backend:5328/api/receive-text');  // Adjust URL based on your setup
       const data = await response.json();
   
       if (response.ok) {

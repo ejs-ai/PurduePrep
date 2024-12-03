@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import PyPDF2
 import os
-from PurduePrep.main import main
+from backend.main import main
 
 app = Flask(__name__)
 CORS(app)  # allow Cross-Origin requests, required for communication between frontend and backend
