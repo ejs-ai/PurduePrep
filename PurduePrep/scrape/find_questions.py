@@ -1,7 +1,6 @@
 import re
 from PurduePrep.scrape.split_page import split_page
 from PurduePrep.webcrawl.page import Page
-from PurduePrep.webcrawl.webcrawl_functions import get_content_from_pdf_link
 from transformers import BertTokenizer
 from PurduePrep.scrape.bert_functions import BERTClassifier, predict_question
 from torch import load, device, cuda
