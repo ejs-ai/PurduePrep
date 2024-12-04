@@ -1,4 +1,5 @@
 from PurduePrep.main import main
+import time
 
 if __name__ == '__main__':
     test_input = """AES is a block cipher with a block length of 128 bits.
@@ -149,7 +150,14 @@ features. First, placing both actuators at the base link makes the robot arm lig
 the serial link arm with the second motor fixed to the tip of link 1. Second, a larger end-effecter
 load can be born with the two serial linkage arms sharing the load. Figure 3.2.2 shows a heavyduty robot having a parallel link mechanism
 """
-    questions = main(test_input)
-    print(len(questions))
-    for q, url in questions:
-        print(q + '\n\nEND QUESTION\n\n')
+test_input3 = """Eigenvectors for square matrices are defined as non-zero vector values which when multiplied by the square matrices give the scaler multiple of the vector, i.e. we define an eigenvector for matrix A to be “v” if it specifies the condition, Av = λv
+The scaler multiple λ in the above case is called the eigenvalue of the square matrix. We always have to find the eigenvalues of the square matrix first before finding the eigenvectors of the matrix."""
+
+start_time = time.time()
+questions = main(test_input, 5)
+print(len(questions))
+end_time = time.time()
+for q, url in questions:
+    print(q + '\n\nEND QUESTION\n\n')
+
+print(f'Total backend time: {end_time-start_time} seconds')
