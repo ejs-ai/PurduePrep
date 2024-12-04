@@ -99,7 +99,7 @@ def get_content_from_pdf_link(url):
     pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content.content))
     pdf_text = ""
 
-    if len(pdf_reader.pages) > 70:
+    if len(pdf_reader.pages) > 35:
         return False, title_page_multiplier
 
     if ("exam" or "Exam" or "EXAM" or "midterm" or "Midterm" or "MIDTERM" or "final" or "Final" or "FINAL") in pdf_reader.pages[0].extract_text():
@@ -117,6 +117,7 @@ def search_pdf(url):
         score, pattern_indices = check_if_exam(pdf_text)
         page_score = (score *title_page_multiplier, pattern_indices)
         return page_score
+    return -1
     return (0,[])
 
 def initialize_crawl_defaults(visited=None, page_scores=None, domain_visit_count=None, blacklist=None, whitelist=None):
@@ -200,6 +201,7 @@ def crawl_websites(keywords, websites_list, max_depth, all_page_scores, timeout=
                 try:
                     page_scores = future.result()
                     if page_scores:
+                        page_scores = {url: score for url, score in page_scores.items() if score != -1}
                         all_page_scores.update(page_scores)
                 except Exception as e:
                     print(f"{website} generated an exception: {e}")

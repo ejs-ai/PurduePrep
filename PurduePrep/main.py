@@ -25,7 +25,8 @@ def main(user_input, num_questions):
     # Input handler ---(string)---> Query builder
     # Step 3: Query builder processes all user's gibberish, extracts relevant info, forms query string
     query_string = build_query(user_input)
-
+    print(f'QUERY STRING: {query_string}')
+    print('\n')
     # Query builder ---(query string)---> Web crawler
     # Step 4: Web crawler uses the query string to produce a list of relevant websites
     websites_list, all_page_scores = init_gather_websites(query_string)
