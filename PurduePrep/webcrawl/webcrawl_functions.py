@@ -8,6 +8,8 @@ import re
 from collections import defaultdict
 import time
 import concurrent.futures
+from PurduePrep.webcrawl.page import Page
+from PurduePrep.scrape.find_questions import find_questions
 
 def get_websites(search_query):
     with open(get_webcrawl_functions_path() + '\\google_search_api.txt', 'r') as file:
@@ -64,7 +66,7 @@ def check_if_exam(text):
     pattern_indices = []
 
     for i, line in enumerate(lines):
-        if re.match(r"^\s*(\(?[a-dA-D][\.\)]\)?)", line.strip()):
+        if re.match(r"^\s*(\(?([1-9]|1[0-9]|20|[a-dA-D])[\.\)])", line.strip()):
             question_patterns += 1
             pattern_indices.append(i)  # Store the index where pattern was found
     
@@ -81,7 +83,7 @@ def update_lists(url, blacklist, visited, domain_visit_count):
     organization_match = re.search(r'\b(?:[a-zA-Z0-9-]+)\.(edu|ac|com|net|gov)\b', domain)
     org_name = organization_match.group(0)
 
-    if domain_visit_count[domain] >= 150 and org_name not in blacklist:
+    if domain_visit_count[domain] >= 200 and org_name not in blacklist:
         blacklist.append(org_name)
     
     visited.add(url)
@@ -97,10 +99,10 @@ def get_content_from_pdf_link(url):
     pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content.content))
     pdf_text = ""
 
-    if len(pdf_reader.pages) > 20:
+    if len(pdf_reader.pages) > 70:
         return False, title_page_multiplier
 
-    if ("exam" or "Exam" or "midterm" or "Midterm" or "final" or "Final") in pdf_reader.pages[0].extract_text():
+    if ("exam" or "Exam" or "EXAM" or "midterm" or "Midterm" or "MIDTERM" or "final" or "Final" or "FINAL") in pdf_reader.pages[0].extract_text():
         title_page_multiplier = 1.5
     
     for page_num in range(len(pdf_reader.pages)):
@@ -169,17 +171,51 @@ def crawl(url, depth, keywords, visited = None, page_scores = None, domain_visit
 
     return page_scores
 
-def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
+# def crawl_websites(keywords, websites_list, max_depth, all_page_scores):
+#     with concurrent.futures.ThreadPoolExecutor() as executor:
+#         future_to_website = {executor.submit(crawl, website, max_depth, keywords): website for website in websites_list}
+
+#         for future in concurrent.futures.as_completed(future_to_website):
+#             website = future_to_website[future]
+#             try:
+#                 page_scores = future.result()
+#                 if page_scores:
+#                     all_page_scores.update(page_scores)
+#             except Exception as e:
+#                 print(f"{website} generated an exception: {e}")
+
+#     return sorted(all_page_scores.items(), key=lambda x: x[1], reverse=True)[:10]
+
+def crawl_websites(keywords, websites_list, max_depth, all_page_scores, timeout=35):
+    start_time = time.time()
+    
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future_to_website = {executor.submit(crawl, website, max_depth, keywords): website for website in websites_list}
+        completed_futures = set()
 
-        for future in concurrent.futures.as_completed(future_to_website):
-            website = future_to_website[future]
-            try:
-                page_scores = future.result()
-                if page_scores:
-                    all_page_scores.update(page_scores)
-            except Exception as e:
-                print(f"{website} generated an exception: {e}")
+        try:
+            for future in concurrent.futures.as_completed(future_to_website, timeout=timeout):
+                completed_futures.add(future)
+                website = future_to_website[future]
+                try:
+                    page_scores = future.result()
+                    if page_scores:
+                        all_page_scores.update(page_scores)
+                except Exception as e:
+                    print(f"{website} generated an exception: {e}")
+        except concurrent.futures.TimeoutError:
+            print("Crawl process exceeded timeout. Returning partial results.")
 
+    print(sorted(all_page_scores.items(), key=lambda x: x[1], reverse=True)[:10])
     return sorted(all_page_scores.items(), key=lambda x: x[1], reverse=True)[:10]
+
+def process_url(url, score):
+
+    relevant_character_indices = score[1]
+    pdf_text, _ = get_content_from_pdf_link(url)
+    if not pdf_text:
+        return []
+
+    page_content = Page(url, pdf_text, relevant_character_indices)
+    page_questions = find_questions(page_content)
+    return [(question, url) for question in page_questions]
