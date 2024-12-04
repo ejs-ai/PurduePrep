@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://127.0.0.1:5328/api/:path*', // Proxy to Flask API
+        destination: 'http://127.0.0.1:5000/api/:path*', // http://127.0.0.1:5000/api/:path* for local. Hopefully just /api/:path* 
       },
     ];
   },

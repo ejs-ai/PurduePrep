@@ -45,13 +45,13 @@ const Home: React.FC = () => {
         formData.append('file', selectedFile);
         formData.append('numQuestions', numQuestions.toString());
         
-        response = await fetch('http://backend:5328/api/receive-text', {
+        response = await fetch('/api/receive-text', {
           method: 'POST',
           body: formData,
         });
       } else {
         // Otherwise, send text input as JSON
-        response = await fetch('http://backend:5328/api/receive-text', {
+        response = await fetch('/api/receive-text', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
     const errorTimeout = setErrorTimeout(); // Start timeout when fetching questions
   
     try {
-      const response = await fetch('http://backend:5328/api/receive-text');  // Adjust URL based on your setup
+      const response = await fetch('/api/get-questions');  // Adjust URL based on your setup, http://127.0.0.1:5000/api/get-questions for local
       const data = await response.json();
   
       if (response.ok) {
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
           height={50}
         />
       </div>
-      <h1 className="title">PurduePrep 0.2.0</h1>
+      <h1 className="title">PurduePrep 1.0.0</h1>
       <p className="explanation">
         PurduePrep finds real exam questions from universities to match your text or document input. We recommend inputting course notes!
       </p>

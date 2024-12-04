@@ -55,7 +55,7 @@ def get_webcrawl_functions_path():
             break
     else:
         raise FileNotFoundError("Could not locate the 'PurduePrep' directory")
-    webcrawl_functions_path = purdue_prep_dir / 'webcrawl'
+    webcrawl_functions_path = purdue_prep_dir / 'backend' / 'webcrawl'
     return str(webcrawl_functions_path)
     
 def check_if_exam(text):

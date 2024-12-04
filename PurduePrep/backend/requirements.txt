@@ -9,6 +9,6 @@ Requests==2.32.3
 scikit_learn==1.5.2
 spacy==3.8.2
 transformers==4.46.2
-torch==2.5.1
+# torch==2.5.1
 scipy==1.14.1
 thinc==8.3.1

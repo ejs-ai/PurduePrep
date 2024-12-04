@@ -1,12 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import PyPDF2
 import os
 from backend.main import main
 
-app = Flask(__name__)
-CORS(app)  # allow Cross-Origin requests, required for communication between frontend and backend
-input_str = None  # global variable for use in both API routes (input and output)
+app = Flask(__name__, static_folder='/static')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(os.path.join(app.static_folder, 'static'), path)
 
 # API route for receiving input
 @app.route('/api/receive-text', methods=['POST'])
@@ -68,4 +70,4 @@ def get_questions():
     return jsonify({"questions": questions_with_urls})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5328)
+    app.run(host="0.0.0.0", port=5000)
