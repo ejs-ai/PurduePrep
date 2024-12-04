@@ -24,6 +24,7 @@ def receive_text():
             input_str = file.read().decode('utf-8')  # Read text file content
         elif file_extension == '.pdf':
             input_str = extract_text_from_pdf(file)
+            print("Successful text read from pdf file.")
         else:
             return jsonify({"error": "Unsupported file type"}), 400
     else:
