@@ -14,7 +14,7 @@ from PurduePrep.scrape.find_questions import find_questions
 def get_websites(search_query):
     with open(get_webcrawl_functions_path() + '\\google_search_api.txt', 'r') as file:
         API_KEY = file.read().strip()
-    SEARCH_ENGINE_ID = "7153013e76dda42f8"
+    SEARCH_ENGINE_ID = "93fda69dc9b3449be"
 
     url = 'https://www.googleapis.com/customsearch/v1'
     params = {

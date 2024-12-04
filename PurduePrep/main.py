@@ -8,10 +8,12 @@ from PurduePrep.webcrawl.query_build import build_query
 from PurduePrep.scrape.find_questions import find_questions
 from PurduePrep.scrape.relevance import rank_questions
 import concurrent.futures
+import time
 
 CRAWL_DEPTH = 4
 
 def main(user_input, num_questions):
+    start_time = time.time()
     # Step 0: Initialize the website?
     # This is handled in app.py
     # Step 1: Retrieve input from the user (text, pdf, or image). App.py handles processing of the input type and calls this function with a string
@@ -53,4 +55,6 @@ def main(user_input, num_questions):
         # Step 9: Output handler loops through list of question objects and packages to the website
         # Output handler ---(output)---> Website
         # app.py is the output handler, which includes the calling function for main
+    end_time = time.time()
+    print(f'\n Total runtime: {end_time - start_time} seconds!')
     return questions[:num_questions]
