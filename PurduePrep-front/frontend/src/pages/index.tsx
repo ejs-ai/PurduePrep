@@ -37,6 +37,7 @@ const Home: React.FC = () => {
   // Send input (text or file) to Flask backend
   const handleSubmit = async () => {
     try {
+      console.log('start handle submit');
       let response;
       
       // Check if a file is selected, use FormData for file upload
@@ -64,8 +65,10 @@ const Home: React.FC = () => {
       }
       
       const data = await response.json();
+      console.log(data);
 
       if (data.message === 'Text received successfully') {
+        console.log('Text received successfully');
         fetchQuestions();  // Fetch questions from backend on success
       } else {
         setError('Failed to submit input.');
@@ -94,8 +97,10 @@ const Home: React.FC = () => {
     try {
       const response = await fetch('https://flask-824914791442.us-central1.run.app/api/get-questions');  // Adjust URL based on your setup, http://127.0.0.1:5000/api/get-questions for local
       const data = await response.json();
-  
+      console.log(data.questions);
+      
       if (response.ok) {
+        console.log('response ok');
         setQuestions(data.questions);  // Set questions from backend
         clearTimeout(errorTimeout);  // Clear the timeout since we got a successful response
         setTimeoutReached(false); // Reset timeout flag
@@ -116,7 +121,7 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    // fetchQuestions();
+    //fetchQuestions();
   }, []);
 
   return (

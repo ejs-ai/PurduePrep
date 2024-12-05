@@ -6,6 +6,8 @@ from main import main
 import logging
 
 app = Flask(__name__)
+CORS(app)
+input_str = None
 
 @app.before_request
 def log_request_info():
