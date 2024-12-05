@@ -6,11 +6,8 @@ ENV NODE_ENV=production
 # Install backend dependencies
 # Install PyTorch
 RUN pip install torch==2.5.1 --extra-index-url https://download.pytorch.org/whl/cpu
-
 COPY PurduePrep/backend/requirements.txt ./ 
 RUN pip install --no-cache-dir -r requirements.txt
-RUN python3 -m spacy download en_core_web_md
-RUN python3 -c "import nltk; nltk.download('stopwords')"
 
 # Copy the entire PurduePrep folder
 COPY PurduePrep /PurduePrep
@@ -23,7 +20,6 @@ RUN npm install
 RUN npm run build
 
 # Expose the necessary ports
-EXPOSE 8080
 EXPOSE 3000
 EXPOSE 5000
 

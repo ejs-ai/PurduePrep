@@ -95,7 +95,7 @@ const Home: React.FC = () => {
     const errorTimeout = setErrorTimeout(); // Start timeout when fetching questions
   
     try {
-      const response = await fetch('https://flask-824914791442.us-central1.run.app/api/get-questions');  // Adjust URL based on your setup, http://127.0.0.1:5000/api/get-questions for local
+      const response = await fetch('http://127.0.0.1:5000/api/get-questions');  // Adjust URL based on your setup, http://127.0.0.1:5000/api/get-questions for local
       const data = await response.json();
       console.log(data.questions);
       
