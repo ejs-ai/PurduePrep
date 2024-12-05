@@ -5,8 +5,7 @@ from webcrawl.page import Page
 from transformers import BertTokenizer
 from scrape.bert_functions import BERTClassifier, predict_question
 from torch import load, device
-import dropbox  
-import requests
+
 MAX_TEXT_LENGTH = 1000000
 
 ### TEST URLS
