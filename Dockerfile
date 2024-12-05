@@ -1,22 +1,35 @@
 FROM nikolaik/python-nodejs:python3.12-nodejs21-slim-canary AS base
 
-# Requirements up here to save time using Docker cache
-COPY PurduePrep/backend/requirements.txt ./
-RUN pip install torch==2.5.1 --extra-index-url https://download.pytorch.org/whl/cpu
-RUN pip install --no-cache-dir -r requirements.txt
+# Set environment to production for Next.js
+ENV NODE_ENV=production
 
+# Install backend dependencies
+# Install PyTorch
+RUN pip install torch==2.5.1 --extra-index-url https://download.pytorch.org/whl/cpu
+
+COPY PurduePrep/backend/requirements.txt ./ 
+RUN pip install --no-cache-dir -r requirements.txt
+RUN python3 -m spacy download en_core_web_md
+RUN python3 -c "import nltk; nltk.download('stopwords')"
+
+# Copy the entire PurduePrep folder
 COPY PurduePrep /PurduePrep
 
-# RUN pip install torch==2.5.1 --extra-index-url https://download.pytorch.org/whl/cpu
-# RUN pip install --no-cache-dir -r /PurduePrep/backend/requirements.txt
-
+# Install frontend dependencies
 WORKDIR /PurduePrep/frontend
 RUN npm install
 
+# Build frontend (Only do this during the build process)
+RUN npm run build
+
+# Expose the necessary ports
+EXPOSE 8080
 EXPOSE 3000
-EXPOSE 80
 EXPOSE 5000
 
+
+# Set Python path for backend
 ENV PYTHONPATH=/PurduePrep
 
-CMD ["sh", "-c", "python3 /PurduePrep/backend/app.py & cd /PurduePrep/frontend && npm run build && npm run start"]
+# Run backend and frontend in production mode
+CMD ["sh", "-c", "python3 /PurduePrep/backend/app.py & cd /PurduePrep/frontend && npm run start"]

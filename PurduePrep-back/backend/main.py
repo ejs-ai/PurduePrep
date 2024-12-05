@@ -2,11 +2,11 @@
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
 
-from backend.webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
-from backend.webcrawl.page import Page
-from backend.webcrawl.query_build import build_query
-from backend.scrape.find_questions import find_questions
-from backend.scrape.relevance import rank_questions
+from webcrawl.webcrawl_functions import get_content_from_pdf_link, init_gather_websites, crawl_websites
+from webcrawl.page import Page
+from webcrawl.query_build import build_query
+from scrape.find_questions import find_questions
+from scrape.relevance import rank_questions
 
 CRAWL_DEPTH = 2
 

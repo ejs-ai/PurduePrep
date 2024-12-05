@@ -12,7 +12,7 @@ import concurrent.futures
 def get_websites(search_query):
     with open(get_webcrawl_functions_path() + '/google_search_api.txt', 'r') as file:
         API_KEY = file.read().strip()
-    SEARCH_ENGINE_ID = "7153013e76dda42f8"
+    SEARCH_ENGINE_ID = "93fda69dc9b3449be"
 
     url = 'https://www.googleapis.com/customsearch/v1'
     params = {
@@ -50,12 +50,12 @@ def open_url(url_to_scrape):
 def get_webcrawl_functions_path():
     current_dir = Path(__file__).resolve()
     for parent in current_dir.parents:
-        if parent.name == 'PurduePrep':
-            purdue_prep_dir = parent
+        if parent.name == 'backend':
+            backend_dir = parent
             break
     else:
-        raise FileNotFoundError("Could not locate the 'PurduePrep' directory")
-    webcrawl_functions_path = purdue_prep_dir / 'backend' / 'webcrawl'
+        raise FileNotFoundError("Could not locate the 'backend' directory")
+    webcrawl_functions_path = backend_dir / 'webcrawl'
     return str(webcrawl_functions_path)
     
 def check_if_exam(text):

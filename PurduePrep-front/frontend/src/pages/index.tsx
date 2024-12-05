@@ -92,7 +92,7 @@ const Home: React.FC = () => {
     const errorTimeout = setErrorTimeout(); // Start timeout when fetching questions
   
     try {
-      const response = await fetch('/api/get-questions');  // Adjust URL based on your setup, http://127.0.0.1:5000/api/get-questions for local
+      const response = await fetch('https://flask-824914791442.us-central1.run.app/api/get-questions');  // Adjust URL based on your setup, http://127.0.0.1:5000/api/get-questions for local
       const data = await response.json();
   
       if (response.ok) {
@@ -102,6 +102,7 @@ const Home: React.FC = () => {
         setError(null); // clear the errors
         setLoading(false);  // End loading state
       } else {
+        console.error(`Error: ${response.status}, ${await response.text()}`);
         setError('Failed to load questions.');
       }
     } catch (error) {
@@ -115,7 +116,7 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchQuestions();
+    // fetchQuestions();
   }, []);
 
   return (

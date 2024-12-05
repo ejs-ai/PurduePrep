@@ -1,0 +1,70 @@
+[debug] [2024-12-05T06:17:10.739Z] ----------------------------------------------------------------------
+[debug] [2024-12-05T06:17:10.741Z] Command:       C:\Users\jkamp\AppData\Local\fnm_multishells\86280_1733379188487\node.exe C:\Users\jkamp\AppData\Local\fnm_multishells\86280_1733379188487\node_modules\firebase-tools\lib\bin\firebase.js init hosting
+[debug] [2024-12-05T06:17:10.741Z] CLI Version:   13.28.0
+[debug] [2024-12-05T06:17:10.741Z] Platform:      win32
+[debug] [2024-12-05T06:17:10.741Z] Node Version:  v22.12.0
+[debug] [2024-12-05T06:17:10.742Z] Time:          Thu Dec 05 2024 01:17:10 GMT-0500 (Eastern Standard Time)
+[debug] [2024-12-05T06:17:10.742Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-05T06:17:10.748Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-05T06:17:10.749Z] > authorizing via signed-in user (jkamphuis623@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\jkamp\OneDrive\Documents\Purdue Classes\Senior Design\PurduePrep\PurduePrep\frontend
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2024-12-05T06:18:01.956Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:01.956Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:01.957Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2024-12-05T06:18:01.957Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"purdueprep-firebase","name":"purdueprep-firebase"}
+[debug] [2024-12-05T06:18:02.365Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 200
+[debug] [2024-12-05T06:18:02.365Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"name":"operations/cp.4949648966782339472"}
+[debug] [2024-12-05T06:18:02.366Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:02.366Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:02.366Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 [none]
+[debug] [2024-12-05T06:18:02.721Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 200
+[debug] [2024-12-05T06:18:02.721Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 {"name":"operations/cp.4949648966782339472"}
+[debug] [2024-12-05T06:18:03.224Z] [Project Creation Poller] Retrying task index 0
+[debug] [2024-12-05T06:18:03.225Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:03.225Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:03.225Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 [none]
+[debug] [2024-12-05T06:18:03.480Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 200
+[debug] [2024-12-05T06:18:03.480Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 {"name":"operations/cp.4949648966782339472"}
+[debug] [2024-12-05T06:18:04.487Z] [Project Creation Poller] Retrying task index 0
+[debug] [2024-12-05T06:18:04.488Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:04.488Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:04.488Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 [none]
+[debug] [2024-12-05T06:18:05.144Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 200
+[debug] [2024-12-05T06:18:05.145Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 {"name":"operations/cp.4949648966782339472","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","gettable":true}}
+[debug] [2024-12-05T06:18:07.155Z] [Project Creation Poller] Retrying task index 0
+[debug] [2024-12-05T06:18:07.155Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:07.155Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:07.156Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 [none]
+[debug] [2024-12-05T06:18:07.556Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 200
+[debug] [2024-12-05T06:18:07.557Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.4949648966782339472 {"name":"operations/cp.4949648966782339472","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","gettable":true,"ready":true},"done":true,"response":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.Project","projectNumber":"1055599471071","projectId":"purdueprep-firebase","lifecycleState":"ACTIVE","name":"purdueprep-firebase","createTime":"2024-12-05T06:18:05.306037Z"}}
+[debug] [2024-12-05T06:18:07.558Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:07.558Z] Checked if tokens are valid: true, expires at: 1733382996534
+[debug] [2024-12-05T06:18:07.558Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1beta1/projects/purdueprep-firebase:addFirebase [none]
+[debug] [2024-12-05T06:18:08.011Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1beta1/projects/purdueprep-firebase:addFirebase 403
+[debug] [2024-12-05T06:18:08.011Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/purdueprep-firebase:addFirebase {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2024-12-05T06:18:08.012Z] Request to https://firebase.googleapis.com/v1beta1/projects/purdueprep-firebase:addFirebase had HTTP Error: 403, The caller does not have permission
+[debug] [2024-12-05T06:18:08.066Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/purdueprep-firebase:addFirebase had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\jkamp\AppData\Roaming\fnm\node-versions\v22.12.0\installation\node_modules\firebase-tools\lib\responseToError.js:52:12)
+    at RetryOperation._fn (C:\Users\jkamp\AppData\Roaming\fnm\node-versions\v22.12.0\installation\node_modules\firebase-tools\lib\apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] 
+[error] Error: Failed to add Firebase to Google Cloud Platform project. See firebase-debug.log for more info.

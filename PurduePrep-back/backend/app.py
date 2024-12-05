@@ -1,18 +1,21 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import PyPDF2
 import os
-from backend.main import main
+from main import main
+import logging
 
-app = Flask(__name__, static_folder='/static')
+app = Flask(__name__)
 
-@app.route('/<path:path>')
-def serve_static(path):
-    return send_from_directory(os.path.join(app.static_folder, 'static'), path)
+@app.before_request
+def log_request_info():
+    logging.basicConfig(level=logging.DEBUG)
+    logging.debug(f"Request Path: {request.path}, Method: {request.method}")
 
 # API route for receiving input
 @app.route('/api/receive-text', methods=['POST'])
 def receive_text():
+    print(f"Received request: {request.data}")
     global input_str
     global num_questions
 
@@ -66,8 +69,10 @@ def get_questions():
         questions_with_urls = [{"question": q, "url": url} for q, url in questions]
     except TypeError:
         return jsonify({"error": "Unexpected response format from main function"}), 500
-
+    
+    app.logger.debug(f"Response data: {questions_with_urls}")
     return jsonify({"questions": questions_with_urls})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)

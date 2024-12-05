@@ -1,11 +1,12 @@
 import re
 from pathlib import Path
-from backend.scrape.split_page import split_page
-from backend.webcrawl.page import Page
-from backend.webcrawl.webcrawl_functions import get_content_from_pdf_link
+from scrape.split_page import split_page
+from webcrawl.page import Page
 from transformers import BertTokenizer
-from backend.scrape.bert_functions import BERTClassifier, predict_question
+from scrape.bert_functions import BERTClassifier, predict_question
 from torch import load, device
+import dropbox  
+import requests
 MAX_TEXT_LENGTH = 1000000
 
 ### TEST URLS
@@ -29,6 +30,10 @@ num_classes = 2
 dev = device("cpu")
 tokenizer = BertTokenizer.from_pretrained(bert_model_name)
 question_id = BERTClassifier(bert_model_name, num_classes)
+# path = get_scrape_path() + '/bert_classifier.pth'
+# req = requests.get('https://www.dropbox.com/scl/fi/wdf2g7qrtjybqc47j4p9y/bert_classifier.pth?rlkey=y11v2o6wwpsj7rkravtt5gzg2&st=lev4pyed&dl=1')
+# with open(path, "wb") as file:
+#     file.write(req.content)
 question_id.load_state_dict(load(get_scrape_path() + '/bert_classifier.pth', weights_only=True, map_location=dev))
 
 def predict_sentences(sentences, model, tokenizer, dev):
