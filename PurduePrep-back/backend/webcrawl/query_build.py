@@ -4,18 +4,10 @@
 import urllib.parse
 from sklearn.feature_extraction.text import TfidfVectorizer
 import nltk
-from nltk.corpus import stopwords
-
-# Define stopwords
-try:
-    stop_words = list(stopwords.words('english'))
-except LookupError:
-    print("downloading NLTK stopwords")
-    nltk.download('stopwords')
+from main import stop_words
 
 # Function to extract keywords using TF-IDF
 def extract_keywords(text, top_n=10): 
-    stop_words = list(stopwords.words('english'))
     # Use TF-IDF to extract keywords (no stopwords)
     vectorizer = TfidfVectorizer(stop_words=stop_words)
     tfidf_matrix = vectorizer.fit_transform([text])

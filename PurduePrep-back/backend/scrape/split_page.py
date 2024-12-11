@@ -1,13 +1,6 @@
 import numpy as np
 import spacy
-
-# load spacy model
-try:
-    nlp = spacy.load("en_core_web_md")
-except OSError:
-    print("Model 'en_core_web_md' not found. Downloading it now...")
-    spacy.cli.download("en_core_web_md")
-    nlp = spacy.load("en_core_web_md")
+from main import nlp
 
 def process(text):
     doc = nlp(text)

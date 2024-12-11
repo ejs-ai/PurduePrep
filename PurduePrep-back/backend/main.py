@@ -1,14 +1,47 @@
 # Classes:
 # Page {url, body(extracted info from scrape)}
 # Question {url from page, question body}
-
-from webcrawl.webcrawl_functions import init_gather_websites, crawl_websites, get_content_from_pdf_link, process_url
-from webcrawl.page import Page
-from webcrawl.query_build import build_query
-from scrape.find_questions import find_questions
-from scrape.relevance import rank_questions
-import concurrent.futures
+import spacy
+from nltk.corpus import stopwords
+from transformers import BertTokenizer
+from scrape.bert_functions import BERTClassifier, predict_question
+from torch import load, device
 import time
+from pathlib import Path
+
+print('loading spacy model...')
+start = time.time()
+nlp = spacy.load("en_core_web_md")
+end = time.time()
+print('loaded spacy model in ' + str(end - start) + ' seconds.')
+
+print('loading stopwords...')
+start = time.time()
+stop_words = list(stopwords.words('english'))
+end = time.time()
+print('loaded stopwords in ' + str(end - start) + ' seconds.')
+
+
+print('loading bert model...')
+current_dir = Path(__file__).resolve()
+for parent in current_dir.parents:
+        if parent.name == 'backend':
+            backend_dir = parent
+            break
+model_path = backend_dir / 'scrape' / 'bert_classifier.pth'
+start = time.time()
+bert_model_name = 'bert-base-uncased'
+num_classes = 2
+dev = device("cpu")
+tokenizer = BertTokenizer.from_pretrained(bert_model_name)
+question_id = BERTClassifier(bert_model_name, num_classes)
+question_id.load_state_dict(load(model_path, weights_only=True, map_location=dev))
+end = time.time()
+print('loaded bert model in ' + str(end - start) + ' seconds.')
+
+from webcrawl.webcrawl_functions import init_gather_websites, crawl_websites, process_url
+from webcrawl.query_build import build_query
+import concurrent.futures
 
 CRAWL_DEPTH = 4
 
@@ -49,7 +82,7 @@ def main(user_input, num_questions):
 
     # Question ID ---(question objects)---> Relevance checker
     # Step 8: Question objects go to relevance checker to be evaluated for content
-    #questions = rank_questions(user_input, questions)
+    #questions = rank_questions(nlp, user_input, questions)
 
         # Relevance checker ---(list of question objects)---> Output handler
         # Step 9: Output handler loops through list of question objects and packages to the website
